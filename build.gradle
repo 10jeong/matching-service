@@ -16,6 +16,15 @@ java {
 
 repositories {
     mavenCentral()
+
+    maven {
+        name = "GithubPackages"
+        url = uri("https://maven.pkg.github.com/10jeong/common-module")
+        credentials {
+            username = project.findProperty("GITHUB_USERNAME")
+            password = project.findProperty("GITHUB_TOKEN")
+        }
+    }
 }
 
 ext {
@@ -23,6 +32,7 @@ ext {
 }
 
 dependencies {
+    implementation 'com.yeoljeong:common-module:0.0.4-snapshot'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-web'
