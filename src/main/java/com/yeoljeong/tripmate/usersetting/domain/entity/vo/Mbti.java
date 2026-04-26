@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MbtiInfo {
+public class Mbti {
 
 	private static final String UNKNOWN = "UNKNOWN";
 
@@ -33,7 +33,7 @@ public class MbtiInfo {
 	@Column(nullable = false)
 	private MbtiPJ mbtiPJ = MbtiPJ.UNKNOWN;
 
-	public boolean matches(MbtiInfo target) {
+	public boolean matches(Mbti target) {
 		if (target == null) return false;
 		return matchAxis(this.mbtiIE, target.mbtiIE)
 			&& matchAxis(this.mbtiSN, target.mbtiSN)
@@ -42,7 +42,7 @@ public class MbtiInfo {
 	}
 
 	private <T extends Enum<T>> boolean matchAxis(T preference, T target) {
-		if (target.name().equals(UNKNOWN)) return true;
+		if (preference.name().equals(UNKNOWN)) return true;
 		return preference == target;
 	}
 }
