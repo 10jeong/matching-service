@@ -1,7 +1,7 @@
 package com.yeoljeong.tripmate.usersetting.domain.entity;
 
 import com.yeoljeong.tripmate.usersetting.domain.entity.constants.Gender;
-import com.yeoljeong.tripmate.usersetting.domain.entity.vo.MbtiOption;
+import com.yeoljeong.tripmate.usersetting.domain.entity.vo.MbtiInfo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -35,14 +35,14 @@ public class UserSetting {
 	private boolean isSmoking;
 
 	@Embedded
-	private MbtiOption mbtiOption;
+	private MbtiInfo mbtiOption;
 
 	public UserSetting create(
 		UUID userId,
 		boolean matchingEnabled,
 		Gender gender,
 		boolean isSmoking,
-		MbtiOption mbtiOption
+		MbtiInfo mbtiOption
 	) {
 		UserSetting userSetting = new UserSetting();
 		userSetting.userId = userId;
