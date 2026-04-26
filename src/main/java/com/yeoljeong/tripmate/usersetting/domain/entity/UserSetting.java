@@ -42,14 +42,14 @@ public class UserSetting {
 		boolean matchingEnabled,
 		Gender gender,
 		boolean isSmoking,
-		MbtiInfo mbtiOption
+		MbtiInfo mbtiInfo
 	) {
 		UserSetting userSetting = new UserSetting();
 		userSetting.userId = userId;
 		userSetting.matchingEnabled = matchingEnabled;
 		userSetting.gender = gender;
 		userSetting.isSmoking = isSmoking;
-		userSetting.mbtiInfo = mbtiOption;
+		userSetting.mbtiInfo = mbtiInfo;
 		return userSetting;
 	}
 }
