@@ -41,7 +41,6 @@ public class MbtiInfo {
 	}
 
 	private <T extends Enum<T>> boolean matchAxis(T preference, T target) {
-		if (preference.name().equals(UNKNOWN)) return true;
 		if (target.name().equals(UNKNOWN)) return true;
 		return preference == target;
 	}
