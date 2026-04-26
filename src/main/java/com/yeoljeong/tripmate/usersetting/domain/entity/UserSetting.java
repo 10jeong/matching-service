@@ -35,7 +35,7 @@ public class UserSetting {
 	private boolean isSmoking;
 
 	@Embedded
-	private MbtiInfo mbtiOption;
+	private MbtiInfo mbtiInfo;
 
 	public UserSetting create(
 		UUID userId,
@@ -49,7 +49,7 @@ public class UserSetting {
 		userSetting.matchingEnabled = matchingEnabled;
 		userSetting.gender = gender;
 		userSetting.isSmoking = isSmoking;
-		userSetting.mbtiOption = mbtiOption;
+		userSetting.mbtiInfo = mbtiOption;
 		return userSetting;
 	}
 }
