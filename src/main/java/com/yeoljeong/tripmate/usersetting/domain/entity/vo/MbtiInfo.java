@@ -34,6 +34,7 @@ public class MbtiInfo {
 	private MbtiPJ mbtiPJ = MbtiPJ.UNKNOWN;
 
 	public boolean matches(MbtiInfo target) {
+		if (target == null) return false;
 		return matchAxis(this.mbtiIE, target.mbtiIE)
 			&& matchAxis(this.mbtiSN, target.mbtiSN)
 			&& matchAxis(this.mbtiTF, target.mbtiTF)
