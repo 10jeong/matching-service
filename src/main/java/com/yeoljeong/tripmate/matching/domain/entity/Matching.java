@@ -1,0 +1,57 @@
+package com.yeoljeong.tripmate.matching.domain.entity;
+
+import com.yeoljeong.tripmate.domain.BaseAuditEntity;
+import com.yeoljeong.tripmate.matching.domain.constants.MatchingStatus;
+import com.yeoljeong.tripmate.matching.domain.entity.vo.Location;
+import com.yeoljeong.tripmate.matching.domain.entity.vo.MatchingPeriod;
+import com.yeoljeong.tripmate.matching.domain.entity.vo.MatchingSetting;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
+
+@Entity
+@Table(name = "matching")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Matching {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.UUID)
+	@UuidGenerator
+	private UUID id;
+
+	@Column(nullable = false)
+	private UUID hostUserId;
+
+	@Column(nullable = false, length = 50)
+	private String title;
+
+	@Column(columnDefinition = "TEXT")
+	private String description;
+
+	@Embedded
+	private Location location;
+
+	@Embedded
+	private MatchingPeriod matchingPeriod;
+
+	@Column(length = 500)
+	private String chatUrl;
+
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private MatchingStatus status;
+
+	@Embedded
+	private MatchingSetting matchingSetting;
+}
