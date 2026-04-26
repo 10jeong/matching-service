@@ -1,7 +1,7 @@
 package com.yeoljeong.tripmate.usersetting.domain.entity;
 
 import com.yeoljeong.tripmate.usersetting.domain.entity.constants.Gender;
-import com.yeoljeong.tripmate.usersetting.domain.entity.vo.MbtiInfo;
+import com.yeoljeong.tripmate.usersetting.domain.entity.vo.Mbti;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -35,5 +35,5 @@ public class UserSetting {
 	private boolean isSmoking;
 
 	@Embedded
-	private MbtiInfo mbtiInfo;
+	private Mbti mbti;
 }
