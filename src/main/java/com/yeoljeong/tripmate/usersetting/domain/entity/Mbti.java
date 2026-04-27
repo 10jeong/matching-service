@@ -1,4 +1,4 @@
-package com.yeoljeong.tripmate.usersetting.domain.entity.vo;
+package com.yeoljeong.tripmate.usersetting.domain.entity;
 
 import com.yeoljeong.tripmate.usersetting.domain.entity.constants.MbtiIE;
 import com.yeoljeong.tripmate.usersetting.domain.entity.constants.MbtiPJ;
@@ -9,11 +9,13 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Embeddable
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Mbti {
+class Mbti {
 
 	private static final String UNKNOWN = "UNKNOWN";
 
@@ -33,7 +35,16 @@ public class Mbti {
 	@Column(nullable = false)
 	private MbtiPJ mbtiPJ = MbtiPJ.UNKNOWN;
 
-	public boolean matches(Mbti target) {
+	protected static Mbti of(MbtiIE ie, MbtiSN sn, MbtiTF tf, MbtiPJ pj) {
+		Mbti mbti = new Mbti();
+		mbti.mbtiIE = ie == null ? MbtiIE.UNKNOWN : ie;
+		mbti.mbtiSN = sn == null ? MbtiSN.UNKNOWN : sn;
+		mbti.mbtiTF = tf == null ? MbtiTF.UNKNOWN : tf;
+		mbti.mbtiPJ = pj == null ? MbtiPJ.UNKNOWN : pj;
+		return mbti;
+	}
+
+	protected boolean matches(Mbti target) {
 		if (target == null) return false;
 		return matchAxis(this.mbtiIE, target.mbtiIE)
 			&& matchAxis(this.mbtiSN, target.mbtiSN)
