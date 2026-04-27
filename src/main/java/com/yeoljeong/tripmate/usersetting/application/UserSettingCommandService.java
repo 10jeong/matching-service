@@ -24,7 +24,6 @@ public class UserSettingCommandService {
 		UserSetting setting = userSettingRepository.findByUserIdAndIsDeletedFalse(
 				command.userId())
 			.orElseThrow(() -> new BusinessException(NOT_FOUND_USER_SETTING));
-		log.info("command: {}", command);
 		setting.update(
 			command.isSmoking(), command.ie(), command.sn(), command.tf(), command.pj()
 		);
