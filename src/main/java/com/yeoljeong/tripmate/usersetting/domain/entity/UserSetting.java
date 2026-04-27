@@ -1,7 +1,11 @@
 package com.yeoljeong.tripmate.usersetting.domain.entity;
 
+import com.yeoljeong.tripmate.domain.BaseAuditEntity;
 import com.yeoljeong.tripmate.usersetting.domain.entity.constants.Gender;
-import com.yeoljeong.tripmate.usersetting.domain.entity.vo.Mbti;
+import com.yeoljeong.tripmate.usersetting.domain.entity.constants.MbtiIE;
+import com.yeoljeong.tripmate.usersetting.domain.entity.constants.MbtiPJ;
+import com.yeoljeong.tripmate.usersetting.domain.entity.constants.MbtiSN;
+import com.yeoljeong.tripmate.usersetting.domain.entity.constants.MbtiTF;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -18,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "user_setting")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserSetting {
+public class UserSetting extends BaseAuditEntity {
 
 	@Id
 	@Column(name = "user_id")
@@ -36,4 +40,23 @@ public class UserSetting {
 
 	@Embedded
 	private Mbti mbti;
+
+	public void update(
+		boolean isSmoking,
+		MbtiIE ie,
+		MbtiSN sn,
+		MbtiTF tf,
+		MbtiPJ pj
+	) {
+		this.isSmoking = isSmoking;
+		this.mbti.update(ie, sn, tf, pj);
+	}
+
+	public MbtiIE getIe() {return this.getMbti().getMbtiIE();}
+
+	public MbtiSN getSn() {return this.getMbti().getMbtiSN();}
+
+	public MbtiTF getTf() {return this.getMbti().getMbtiTF();}
+
+	public MbtiPJ getPj() {return this.getMbti().getMbtiPJ();}
 }
