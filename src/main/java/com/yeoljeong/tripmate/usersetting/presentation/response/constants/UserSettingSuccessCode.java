@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum UserSettingSuccessCode implements SuccessCode {
-	OK(HttpStatus.OK, "세팅이 수정되었습니다.")
+	EDIT_SUCCESS(HttpStatus.OK, "세팅이 수정되었습니다.")
 	;
 
 	private final HttpStatus status;
