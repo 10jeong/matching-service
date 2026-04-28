@@ -13,7 +13,6 @@ import jakarta.persistence.Table;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 @Table(name = "matching")
@@ -22,7 +21,6 @@ public class Matching {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	@UuidGenerator
 	private UUID id;
 
 	@Column(nullable = false)
