@@ -26,6 +26,9 @@ spring:
   sql:
     init:
       mode: never
+  profiles:
+    include:
+      - kafka
 server:
   port: 0
 
