@@ -1,10 +1,10 @@
 package com.yeoljeong.tripmate.usersetting.application.dto.result;
 
-import com.yeoljeong.tripmate.usersetting.domain.entity.UserSetting;
-import com.yeoljeong.tripmate.usersetting.domain.entity.constants.MbtiIE;
-import com.yeoljeong.tripmate.usersetting.domain.entity.constants.MbtiPJ;
-import com.yeoljeong.tripmate.usersetting.domain.entity.constants.MbtiSN;
-import com.yeoljeong.tripmate.usersetting.domain.entity.constants.MbtiTF;
+import com.yeoljeong.tripmate.usersetting.domain.model.UserSetting;
+import com.yeoljeong.tripmate.usersetting.domain.model.constants.MbtiIE;
+import com.yeoljeong.tripmate.usersetting.domain.model.constants.MbtiPJ;
+import com.yeoljeong.tripmate.usersetting.domain.model.constants.MbtiSN;
+import com.yeoljeong.tripmate.usersetting.domain.model.constants.MbtiTF;
 
 public record MbtiResult(
 	MbtiIE ie,

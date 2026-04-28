@@ -1,11 +1,11 @@
-package com.yeoljeong.tripmate.usersetting.domain.entity;
+package com.yeoljeong.tripmate.usersetting.domain.model;
 
 import com.yeoljeong.tripmate.domain.BaseAuditEntity;
-import com.yeoljeong.tripmate.usersetting.domain.entity.constants.Gender;
-import com.yeoljeong.tripmate.usersetting.domain.entity.constants.MbtiIE;
-import com.yeoljeong.tripmate.usersetting.domain.entity.constants.MbtiPJ;
-import com.yeoljeong.tripmate.usersetting.domain.entity.constants.MbtiSN;
-import com.yeoljeong.tripmate.usersetting.domain.entity.constants.MbtiTF;
+import com.yeoljeong.tripmate.usersetting.domain.model.constants.Gender;
+import com.yeoljeong.tripmate.usersetting.domain.model.constants.MbtiIE;
+import com.yeoljeong.tripmate.usersetting.domain.model.constants.MbtiPJ;
+import com.yeoljeong.tripmate.usersetting.domain.model.constants.MbtiSN;
+import com.yeoljeong.tripmate.usersetting.domain.model.constants.MbtiTF;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
