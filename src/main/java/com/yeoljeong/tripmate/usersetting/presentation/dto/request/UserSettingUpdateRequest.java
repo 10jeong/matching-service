@@ -1,6 +1,6 @@
-package com.yeoljeong.tripmate.usersetting.presentation.request;
+package com.yeoljeong.tripmate.usersetting.presentation.dto.request;
 
-import com.yeoljeong.tripmate.usersetting.application.command.UserSettingCommand;
+import com.yeoljeong.tripmate.usersetting.application.dto.command.UserSettingCommand;
 import com.yeoljeong.tripmate.usersetting.domain.entity.constants.MbtiIE;
 import com.yeoljeong.tripmate.usersetting.domain.entity.constants.MbtiPJ;
 import com.yeoljeong.tripmate.usersetting.domain.entity.constants.MbtiSN;

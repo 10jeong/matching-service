@@ -1,4 +1,4 @@
-package com.yeoljeong.tripmate.matching.domain.entity.vo;
+package com.yeoljeong.tripmate.matching.domain.entity;
 
 import com.yeoljeong.tripmate.matching.domain.constants.PreferenceGender;
 import com.yeoljeong.tripmate.matching.domain.constants.PreferenceMbtiIE;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MatchingSetting {
+class MatchingSetting {
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)

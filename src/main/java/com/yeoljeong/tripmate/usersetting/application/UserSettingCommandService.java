@@ -3,8 +3,8 @@ package com.yeoljeong.tripmate.usersetting.application;
 import static com.yeoljeong.tripmate.usersetting.domain.exception.UserSettingErrorCode.NOT_FOUND_USER_SETTING;
 
 import com.yeoljeong.tripmate.exception.BusinessException;
-import com.yeoljeong.tripmate.usersetting.application.command.UserSettingCommand;
-import com.yeoljeong.tripmate.usersetting.application.result.UserSettingResult;
+import com.yeoljeong.tripmate.usersetting.application.dto.command.UserSettingCommand;
+import com.yeoljeong.tripmate.usersetting.application.dto.result.UserSettingResult;
 import com.yeoljeong.tripmate.usersetting.domain.entity.UserSetting;
 import com.yeoljeong.tripmate.usersetting.domain.repository.UserSettingRepository;
 import lombok.RequiredArgsConstructor;

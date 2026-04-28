@@ -1,6 +1,6 @@
-package com.yeoljeong.tripmate.usersetting.presentation.response;
+package com.yeoljeong.tripmate.usersetting.presentation.dto.response;
 
-import com.yeoljeong.tripmate.usersetting.application.result.UserSettingResult;
+import com.yeoljeong.tripmate.usersetting.application.dto.result.UserSettingResult;
 import java.util.UUID;
 
 public record UserSettingResponse(

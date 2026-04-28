@@ -1,7 +1,7 @@
-package com.yeoljeong.tripmate.matching.infrastructure.repository;
+package com.yeoljeong.tripmate.matching.infrastructure.persistence.repositoryimpl;
 
 import com.yeoljeong.tripmate.matching.domain.repository.MatchingRepository;
-import com.yeoljeong.tripmate.matching.infrastructure.repository.jpa.SpringDataMatchingRepository;
+import com.yeoljeong.tripmate.matching.infrastructure.persistence.jpa.SpringDataMatchingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

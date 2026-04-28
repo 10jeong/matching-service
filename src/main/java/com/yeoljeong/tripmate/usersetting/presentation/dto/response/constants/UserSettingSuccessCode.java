@@ -1,4 +1,4 @@
-package com.yeoljeong.tripmate.usersetting.presentation.response.constants;
+package com.yeoljeong.tripmate.usersetting.presentation.dto.response.constants;
 
 import com.yeoljeong.tripmate.response.constants.SuccessCode;
 import lombok.Getter;
