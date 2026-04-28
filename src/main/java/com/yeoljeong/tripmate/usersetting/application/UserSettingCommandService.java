@@ -1,10 +1,13 @@
 package com.yeoljeong.tripmate.usersetting.application;
 
 import static com.yeoljeong.tripmate.usersetting.domain.exception.UserSettingErrorCode.NOT_FOUND_USER_SETTING;
+import static com.yeoljeong.tripmate.usersetting.domain.exception.UserSettingErrorCode.USER_SETTING_ALREADY_EXISTS;
 
 import com.yeoljeong.tripmate.exception.BusinessException;
+import com.yeoljeong.tripmate.usersetting.application.dto.command.CreateUserSettingCommand;
 import com.yeoljeong.tripmate.usersetting.application.dto.command.UserSettingCommand;
 import com.yeoljeong.tripmate.usersetting.application.dto.result.UserSettingResult;
+import com.yeoljeong.tripmate.usersetting.application.usecase.CreateUserSettingUsecase;
 import com.yeoljeong.tripmate.usersetting.domain.model.UserSetting;
 import com.yeoljeong.tripmate.usersetting.domain.repository.UserSettingRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
-public class UserSettingCommandService {
+public class UserSettingCommandService implements CreateUserSettingUsecase {
 
 	private final UserSettingRepository userSettingRepository;
 
@@ -28,5 +31,13 @@ public class UserSettingCommandService {
 			command.isSmoking(), command.ie(), command.sn(), command.tf(), command.pj()
 		);
 		return UserSettingResult.from(setting);
+	}
+
+	@Override
+	public void create(CreateUserSettingCommand command) {
+		if (userSettingRepository.existsByUserIdAndIsDeletedFalse(command.userId())) {
+			throw new BusinessException(USER_SETTING_ALREADY_EXISTS);
+		}
+		userSettingRepository.save(UserSetting.create(command.userId(), command.gender()));
 	}
 }
