@@ -43,7 +43,7 @@ public class UserSettingController {
 	public ResponseEntity<ApiResponse<UserSettingResponse>> getMySetting(
 		@RequestHeader("X-User-Id") UUID userId
 	) {
-		return ResponseEntity.status(EDIT_SUCCESS.getStatus()).body(
+		return ResponseEntity.status(OK.getStatus()).body(
 			ApiResponse.success(OK, UserSettingResponse.from(
 				userSettingQueryService.getOne(userId)
 			))
