@@ -6,4 +6,6 @@ import java.util.UUID;
 
 public interface UserSettingRepository {
 	Optional<UserSetting> findByUserIdAndIsDeletedFalse(UUID userId);
+	boolean existsByUserIdAndIsDeletedFalse(UUID userId);
+	UserSetting save(UserSetting userSetting);
 }
