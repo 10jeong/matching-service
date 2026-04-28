@@ -1,4 +1,4 @@
-package com.yeoljeong.tripmate.matching.domain.entity;
+package com.yeoljeong.tripmate.matching.domain.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
