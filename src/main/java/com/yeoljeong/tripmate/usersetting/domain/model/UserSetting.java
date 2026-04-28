@@ -52,6 +52,16 @@ public class UserSetting extends BaseAuditEntity {
 		this.mbti.update(ie, sn, tf, pj);
 	}
 
+	public static UserSetting create(UUID userId, String gender) {
+		UserSetting setting = new UserSetting();
+		setting.userId = userId;
+		setting.gender = Gender.valueOf(gender);
+		setting.matchingEnabled = false;
+		setting.isSmoking = false;
+		setting.mbti = new Mbti();
+		return setting;
+	}
+
 	public MbtiIE getIe() {return this.getMbti().getMbtiIE();}
 
 	public MbtiSN getSn() {return this.getMbti().getMbtiSN();}
