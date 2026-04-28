@@ -22,7 +22,6 @@ public class Matching {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	@UuidGenerator
 	private UUID id;
 
 	@Column(nullable = false)
