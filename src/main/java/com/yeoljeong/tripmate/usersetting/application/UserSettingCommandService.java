@@ -5,7 +5,7 @@ import static com.yeoljeong.tripmate.usersetting.domain.exception.UserSettingErr
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.usersetting.application.dto.command.UserSettingCommand;
 import com.yeoljeong.tripmate.usersetting.application.dto.result.UserSettingResult;
-import com.yeoljeong.tripmate.usersetting.domain.entity.UserSetting;
+import com.yeoljeong.tripmate.usersetting.domain.model.UserSetting;
 import com.yeoljeong.tripmate.usersetting.domain.repository.UserSettingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
 package com.yeoljeong.tripmate.usersetting.infrastructure.persistence.jpa;
 
-import com.yeoljeong.tripmate.usersetting.domain.entity.UserSetting;
+import com.yeoljeong.tripmate.usersetting.domain.model.UserSetting;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;

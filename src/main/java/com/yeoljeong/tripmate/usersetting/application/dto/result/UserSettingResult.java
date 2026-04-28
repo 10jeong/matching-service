@@ -1,7 +1,7 @@
 package com.yeoljeong.tripmate.usersetting.application.dto.result;
 
-import com.yeoljeong.tripmate.usersetting.domain.entity.UserSetting;
-import com.yeoljeong.tripmate.usersetting.domain.entity.constants.Gender;
+import com.yeoljeong.tripmate.usersetting.domain.model.UserSetting;
+import com.yeoljeong.tripmate.usersetting.domain.model.constants.Gender;
 import java.util.UUID;
 
 public record UserSettingResult (
