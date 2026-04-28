@@ -10,10 +10,10 @@ public record MbtiResponse(
 ) {
 	public static MbtiResponse from(MbtiResult mbti) {
 		return new MbtiResponse(
-			mbti.ie().name(),
-			mbti.sn().name(),
-			mbti.tf().name(),
-			mbti.pj().name()
+			mbti.ie(),
+			mbti.sn(),
+			mbti.tf(),
+			mbti.pj()
 		);
 	}
 }
