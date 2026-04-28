@@ -1,6 +1,6 @@
 package com.yeoljeong.tripmate.usersetting.application.dto.result;
 
-import com.yeoljeong.tripmate.usersetting.domain.entity.UserSetting;
+import com.yeoljeong.tripmate.usersetting.domain.model.UserSetting;
 
 public record MbtiResult(
 	String ie,
