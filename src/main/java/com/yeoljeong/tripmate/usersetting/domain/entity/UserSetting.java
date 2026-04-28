@@ -43,10 +43,10 @@ public class UserSetting extends BaseAuditEntity {
 
 	public void update(
 		boolean isSmoking,
-		MbtiIE ie,
-		MbtiSN sn,
-		MbtiTF tf,
-		MbtiPJ pj
+		String ie,
+		String sn,
+		String tf,
+		String pj
 	) {
 		this.isSmoking = isSmoking;
 		this.mbti.update(ie, sn, tf, pj);

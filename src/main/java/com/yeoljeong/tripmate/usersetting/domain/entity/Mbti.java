@@ -35,11 +35,11 @@ class Mbti {
 	@Column(nullable = false)
 	private MbtiPJ mbtiPJ = MbtiPJ.UNKNOWN;
 
-	protected void update(MbtiIE ie, MbtiSN sn, MbtiTF tf, MbtiPJ pj) {
-		this.mbtiIE = ie == null ? this.mbtiIE : ie;
-		this.mbtiSN = sn == null ? this.mbtiSN : sn;
-		this.mbtiTF = tf == null ? this.mbtiTF : tf;
-		this.mbtiPJ = pj == null ? this.mbtiPJ : pj;
+	protected void update(String ie, String sn, String tf, String pj) {
+		this.mbtiIE = ie == null ? this.mbtiIE : MbtiIE.valueOf(ie);
+		this.mbtiSN = sn == null ? this.mbtiSN : MbtiSN.valueOf(sn);
+		this.mbtiTF = tf == null ? this.mbtiTF : MbtiTF.valueOf(tf);
+		this.mbtiPJ = pj == null ? this.mbtiPJ : MbtiPJ.valueOf(pj);
 	}
 
 	protected boolean matches(Mbti target) {
