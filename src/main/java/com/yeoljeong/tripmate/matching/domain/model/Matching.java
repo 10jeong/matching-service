@@ -1,4 +1,4 @@
-package com.yeoljeong.tripmate.matching.domain.entity;
+package com.yeoljeong.tripmate.matching.domain.model;
 
 import com.yeoljeong.tripmate.matching.domain.constants.MatchingStatus;
 import jakarta.persistence.Column;
