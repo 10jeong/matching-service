@@ -1,4 +1,4 @@
-package com.yeoljeong.tripmate.usersetting.infrastructure.repository.jpa;
+package com.yeoljeong.tripmate.usersetting.infrastructure.persistence.jpa;
 
 import com.yeoljeong.tripmate.usersetting.domain.entity.UserSetting;
 import java.util.Optional;

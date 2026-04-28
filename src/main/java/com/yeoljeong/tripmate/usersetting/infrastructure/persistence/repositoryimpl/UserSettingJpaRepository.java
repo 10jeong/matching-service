@@ -1,8 +1,8 @@
-package com.yeoljeong.tripmate.usersetting.infrastructure.repository;
+package com.yeoljeong.tripmate.usersetting.infrastructure.persistence.repositoryimpl;
 
 import com.yeoljeong.tripmate.usersetting.domain.entity.UserSetting;
 import com.yeoljeong.tripmate.usersetting.domain.repository.UserSettingRepository;
-import com.yeoljeong.tripmate.usersetting.infrastructure.repository.jpa.SpringDataUserSettingRepository;
+import com.yeoljeong.tripmate.usersetting.infrastructure.persistence.jpa.SpringDataUserSettingRepository;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

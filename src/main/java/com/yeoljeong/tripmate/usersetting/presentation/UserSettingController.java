@@ -1,13 +1,13 @@
 package com.yeoljeong.tripmate.usersetting.presentation;
 
 import static com.yeoljeong.tripmate.response.constants.CommonSuccessCode.OK;
-import static com.yeoljeong.tripmate.usersetting.presentation.response.constants.UserSettingSuccessCode.EDIT_SUCCESS;
+import static com.yeoljeong.tripmate.usersetting.presentation.dto.response.constants.UserSettingSuccessCode.EDIT_SUCCESS;
 
 import com.yeoljeong.tripmate.response.ApiResponse;
 import com.yeoljeong.tripmate.usersetting.application.UserSettingCommandService;
 import com.yeoljeong.tripmate.usersetting.application.UserSettingQueryService;
-import com.yeoljeong.tripmate.usersetting.presentation.request.UserSettingUpdateRequest;
-import com.yeoljeong.tripmate.usersetting.presentation.response.UserSettingResponse;
+import com.yeoljeong.tripmate.usersetting.presentation.dto.request.UserSettingUpdateRequest;
+import com.yeoljeong.tripmate.usersetting.presentation.dto.response.UserSettingResponse;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

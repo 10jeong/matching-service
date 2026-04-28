@@ -1,4 +1,4 @@
-package com.yeoljeong.tripmate.matching.domain.entity.vo;
+package com.yeoljeong.tripmate.matching.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MatchingPeriod {
+class MatchingPeriod {
 
 	@Column(nullable = false)
 	private LocalDateTime scheduledAt;
