@@ -12,7 +12,10 @@ public class UserSettingEventListener {
 
 	private final CreateUserSettingUsecase usecase;
 
-	@KafkaListener(topics = "user-create")
+	@KafkaListener(
+		topics = "user-create",
+		groupId = "${spring.kafka.consumer.group-id}"
+	)
 	public void create(CreateUserEvent event) {
 		usecase.create(event.toCommand());
 	}
