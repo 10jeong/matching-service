@@ -12,6 +12,7 @@ import com.yeoljeong.tripmate.usersetting.domain.model.UserSetting;
 import com.yeoljeong.tripmate.usersetting.domain.repository.UserSettingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +39,10 @@ public class UserSettingCommandService implements CreateUserSettingUsecase {
 		if (userSettingRepository.existsByUserIdAndIsDeletedFalse(command.userId())) {
 			throw new BusinessException(USER_SETTING_ALREADY_EXISTS);
 		}
-		userSettingRepository.save(UserSetting.create(command.userId(), command.gender()));
+		try {
+			userSettingRepository.save(UserSetting.create(command.userId(), command.gender()));
+		} catch (DataIntegrityViolationException e) {
+			throw new BusinessException(USER_SETTING_ALREADY_EXISTS);
+		}
 	}
 }
