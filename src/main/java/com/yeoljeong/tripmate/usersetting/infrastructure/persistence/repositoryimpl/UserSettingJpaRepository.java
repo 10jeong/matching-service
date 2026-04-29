@@ -18,5 +18,15 @@ public class UserSettingJpaRepository implements UserSettingRepository {
 	public Optional<UserSetting> findByUserIdAndIsDeletedFalse(UUID userId) {
 		return userSettingRepository.findByUserIdAndIsDeletedFalse(userId);
 	}
+
+	@Override
+	public boolean existsByUserIdAndIsDeletedFalse(UUID userId) {
+		return userSettingRepository.existsByUserIdAndIsDeletedFalse(userId);
+	}
+
+	@Override
+	public UserSetting save(UserSetting userSetting) {
+		return userSettingRepository.save(userSetting);
+	}
 }
 

@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SpringDataUserSettingRepository extends JpaRepository<UserSetting, UUID> {
 	Optional<UserSetting> findByUserIdAndIsDeletedFalse(UUID userId);
+	boolean existsByUserIdAndIsDeletedFalse(UUID userId);
 }
