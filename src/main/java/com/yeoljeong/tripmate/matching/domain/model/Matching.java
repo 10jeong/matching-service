@@ -12,9 +12,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.UUID;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @Table(name = "matching")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Matching {
@@ -29,7 +31,7 @@ public class Matching {
 	@Column(nullable = false, length = 50)
 	private String title;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "TEXT", nullable = false, length = 500)
 	private String description;
 
 	@Embedded
@@ -38,7 +40,7 @@ public class Matching {
 	@Embedded
 	private MatchingPeriod matchingPeriod;
 
-	@Column(length = 500)
+	@Column(length = 500, nullable = false)
 	private String chatUrl;
 
 	@Enumerated(EnumType.STRING)
@@ -47,4 +49,25 @@ public class Matching {
 
 	@Embedded
 	private MatchingSetting matchingSetting;
+
+	public static Matching create(
+		UUID userId,
+		String title,
+		String description,
+		Location location,
+		MatchingPeriod matchingPeriod,
+		String chatUrl,
+		MatchingSetting matchingSetting
+	) {
+		Matching matching = new Matching();
+		matching.hostUserId = userId;
+		matching.title = title;
+		matching.description = description == null ? "" : description;
+		matching.location = location;
+		matching.matchingPeriod = matchingPeriod;
+		matching.chatUrl = chatUrl == null ? "" : chatUrl;
+		matching.status = MatchingStatus.OPEN;
+		matching.matchingSetting = matchingSetting;
+		return matching;
+	}
 }
