@@ -12,7 +12,6 @@ import org.springframework.kafka.listener.ContainerProperties.AckMode;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.util.backoff.ExponentialBackOff;
-import org.springframework.util.backoff.FixedBackOff;
 
 @Configuration
 @RequiredArgsConstructor
@@ -34,7 +33,7 @@ public class KafkaConsumerConfiguration {
 		factory.getContainerProperties().setAckMode(AckMode.MANUAL);
 		DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(
 			kafkaTemplate,
-			(record, ex) -> new TopicPartition(record.topic() + ".DLT", record.partition()));
+			(record, ex) -> new TopicPartition(record.topic() + ".DLT", -1));
 		ExponentialBackOff backOff = new ExponentialBackOff(retryInterval, 3.0);
 		backOff.setMaxAttempts(maxAttempts);
 
