@@ -34,6 +34,7 @@ public class UserSettingEventListener {
 			} else {
 				log.error("[UserSetting] create failed (business error): userId: {}, error: {}"
 					, event.userId(), e.getMessage());
+				throw e;
 			}
 			acknowledgment.acknowledge();
 		} catch (Exception e) {
