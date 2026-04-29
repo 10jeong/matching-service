@@ -30,7 +30,7 @@ public class KafkaConsumerConfiguration {
 	) {
 		ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(consumerFactory);
-		factory.getContainerProperties().setAckMode(AckMode.MANUAL);
+		factory.getContainerProperties().setAckMode(AckMode.MANUAL_IMMEDIATE);
 		DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(
 			kafkaTemplate,
 			(record, ex) -> new TopicPartition(record.topic() + ".DLT", -1));
@@ -38,6 +38,7 @@ public class KafkaConsumerConfiguration {
 		backOff.setMaxAttempts(maxAttempts);
 
 		DefaultErrorHandler errorHandler = new DefaultErrorHandler(recoverer, backOff);
+		errorHandler.setCommitRecovered(true);
 		factory.setCommonErrorHandler(errorHandler);
 
 		return factory;
