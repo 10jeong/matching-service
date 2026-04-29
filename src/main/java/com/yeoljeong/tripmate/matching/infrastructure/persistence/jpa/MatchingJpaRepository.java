@@ -4,6 +4,6 @@ import com.yeoljeong.tripmate.matching.domain.model.Matching;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface SpringDataMatchingRepository extends JpaRepository<Matching, UUID> {
+public interface MatchingJpaRepository extends JpaRepository<Matching, UUID> {
 
 }
