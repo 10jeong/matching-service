@@ -26,5 +26,6 @@ public record CreateMatchingRequest(
 ) {
 
 	public CreateMatchingCommand toCommand(UUID userId) {
+		return new CreateMatchingCommand();
 	}
 }
