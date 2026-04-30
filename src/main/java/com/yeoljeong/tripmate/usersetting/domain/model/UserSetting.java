@@ -46,7 +46,7 @@ public class UserSetting extends BaseAuditEntity {
 	}
 
 	public void deactivateMatching() {
-		this.matchingEnabled = true;
+		this.matchingEnabled = false;
 	}
 
 	public void update(
