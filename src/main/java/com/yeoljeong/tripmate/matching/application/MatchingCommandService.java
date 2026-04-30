@@ -11,9 +11,11 @@ import com.yeoljeong.tripmate.matching.domain.model.MatchingSetting;
 import com.yeoljeong.tripmate.matching.domain.repository.MatchingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MatchingCommandService {
 
 	private final MatchingRepository repository;
