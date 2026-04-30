@@ -1,8 +1,12 @@
 package com.yeoljeong.tripmate.usersetting.presentation;
 
 import static com.yeoljeong.tripmate.response.constants.CommonSuccessCode.OK;
+import static com.yeoljeong.tripmate.usersetting.presentation.dto.response.constants.UserSettingSuccessCode.ACTIVATE_MATCHING;
+import static com.yeoljeong.tripmate.usersetting.presentation.dto.response.constants.UserSettingSuccessCode.DEACTIVATE_MATCHING;
 import static com.yeoljeong.tripmate.usersetting.presentation.dto.response.constants.UserSettingSuccessCode.EDIT_SUCCESS;
 
+import com.yeoljeong.tripmate.auth.LoginUser;
+import com.yeoljeong.tripmate.auth.UserContext;
 import com.yeoljeong.tripmate.response.ApiResponse;
 import com.yeoljeong.tripmate.usersetting.application.UserSettingCommandService;
 import com.yeoljeong.tripmate.usersetting.application.UserSettingQueryService;
@@ -13,6 +17,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -47,6 +52,26 @@ public class UserSettingController {
 			ApiResponse.success(OK, UserSettingResponse.from(
 				userSettingQueryService.getOne(userId)
 			))
+		);
+	}
+
+	@PatchMapping("/activation")
+	public ResponseEntity<ApiResponse<Void>> activateMatching(
+		@LoginUser UserContext userContext
+	) {
+		userSettingCommandService.activateMatching(UUID.fromString(userContext.userId()));
+		return ResponseEntity.status(EDIT_SUCCESS.getStatus()).body(
+			ApiResponse.success(ACTIVATE_MATCHING, null)
+		);
+	}
+
+	@PatchMapping("/deactivation")
+	public ResponseEntity<ApiResponse<Void>> deactivateMatching(
+		@LoginUser UserContext userContext
+	) {
+		userSettingCommandService.deactivateMatching(UUID.fromString(userContext.userId()));
+		return ResponseEntity.status(EDIT_SUCCESS.getStatus()).body(
+			ApiResponse.success(DEACTIVATE_MATCHING, null)
 		);
 	}
 }

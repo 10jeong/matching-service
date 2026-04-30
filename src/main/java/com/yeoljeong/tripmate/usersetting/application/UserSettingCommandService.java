@@ -10,6 +10,7 @@ import com.yeoljeong.tripmate.usersetting.application.dto.result.UserSettingResu
 import com.yeoljeong.tripmate.usersetting.application.usecase.CreateUserSettingUsecase;
 import com.yeoljeong.tripmate.usersetting.domain.model.UserSetting;
 import com.yeoljeong.tripmate.usersetting.domain.repository.UserSettingRepository;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -44,5 +45,17 @@ public class UserSettingCommandService implements CreateUserSettingUsecase {
 		} catch (DataIntegrityViolationException e) {
 			throw new BusinessException(USER_SETTING_ALREADY_EXISTS);
 		}
+	}
+
+	public void activateMatching(UUID userId) {
+		UserSetting setting = userSettingRepository.findByUserIdAndIsDeletedFalse(userId)
+			.orElseThrow(() -> new BusinessException(NOT_FOUND_USER_SETTING));
+		setting.activateMatching();
+	}
+
+	public void deactivateMatching(UUID userId) {
+		UserSetting setting = userSettingRepository.findByUserIdAndIsDeletedFalse(userId)
+			.orElseThrow(() -> new BusinessException(NOT_FOUND_USER_SETTING));
+		setting.deactivateMatching();
 	}
 }

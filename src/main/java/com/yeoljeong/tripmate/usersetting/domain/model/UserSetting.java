@@ -41,6 +41,14 @@ public class UserSetting extends BaseAuditEntity {
 	@Embedded
 	private Mbti mbti;
 
+	public void activateMatching() {
+		this.matchingEnabled = true;
+	}
+
+	public void deactivateMatching() {
+		this.matchingEnabled = false;
+	}
+
 	public void update(
 		boolean isSmoking,
 		String ie,
