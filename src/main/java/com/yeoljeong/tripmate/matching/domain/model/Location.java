@@ -1,5 +1,11 @@
 package com.yeoljeong.tripmate.matching.domain.model;
 
+import static com.yeoljeong.tripmate.matching.domain.exception.MatchingErrorCode.INVALID_LATITUDE_RANGE;
+import static com.yeoljeong.tripmate.matching.domain.exception.MatchingErrorCode.INVALID_LONGITUDE_RANGE;
+import static com.yeoljeong.tripmate.matching.domain.exception.MatchingErrorCode.LOCATION_REQUIRED;
+
+import com.yeoljeong.tripmate.exception.BusinessException;
+import com.yeoljeong.tripmate.matching.domain.exception.MatchingErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.math.BigDecimal;
@@ -21,6 +27,15 @@ public class Location {
 	private BigDecimal lng;
 
 	public static Location of(BigDecimal lat, BigDecimal lng) {
+		if (lat == null || lng == null) {
+			throw new BusinessException(LOCATION_REQUIRED);
+		}
+		if (lat.compareTo(BigDecimal.valueOf(-90)) < 0 || lat.compareTo(BigDecimal.valueOf(90)) > 0) {
+			throw new BusinessException(INVALID_LATITUDE_RANGE);
+		}
+		if (lng.compareTo(BigDecimal.valueOf(-180)) < 0 || lng.compareTo(BigDecimal.valueOf(180)) > 0) {
+			throw new BusinessException(INVALID_LONGITUDE_RANGE);
+		}
 		return new Location(lat, lng);
 	}
 }
