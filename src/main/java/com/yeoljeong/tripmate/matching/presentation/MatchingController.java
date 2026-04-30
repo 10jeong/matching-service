@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ public class MatchingController {
 
 	private final MatchingCommandService commandService;
 
+	@PostMapping
 	public ResponseEntity<ApiResponse<MatchingDetailResponse>> create(
 		@RequestHeader("X-User-Id") UUID userId,
 		@Valid @RequestBody CreateMatchingRequest request
