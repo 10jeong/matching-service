@@ -2,9 +2,10 @@ package com.yeoljeong.tripmate.usersetting.infrastructure.message;
 
 import static com.yeoljeong.tripmate.usersetting.domain.exception.UserSettingErrorCode.USER_SETTING_ALREADY_EXISTS;
 
+import com.yeoljeong.tripmate.event.UserCreatedEvent;
 import com.yeoljeong.tripmate.exception.BusinessException;
+import com.yeoljeong.tripmate.usersetting.application.dto.command.CreateUserSettingCommand;
 import com.yeoljeong.tripmate.usersetting.application.usecase.CreateUserSettingUsecase;
-import com.yeoljeong.tripmate.usersetting.infrastructure.dto.CreateUserEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -24,9 +25,9 @@ public class UserSettingEventListener {
 		groupId = "${spring.kafka.consumer.group-id}",
 		containerFactory = "kafkaListenerContainerFactory"
 	)
-	public void create(@Payload CreateUserEvent event, Acknowledgment acknowledgment) {
+	public void create(@Payload UserCreatedEvent event, Acknowledgment acknowledgment) {
 		try {
-			usecase.create(event.toCommand());
+			usecase.create(CreateUserSettingCommand.of(event.userId(), event.gender()));
 			acknowledgment.acknowledge();
 		} catch (BusinessException e) {
 			if (USER_SETTING_ALREADY_EXISTS.equals(e.getErrorCode())) {
