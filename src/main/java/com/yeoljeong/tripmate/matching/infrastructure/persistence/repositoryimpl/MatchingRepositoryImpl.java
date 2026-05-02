@@ -4,6 +4,7 @@ import com.yeoljeong.tripmate.matching.domain.constants.MatchingStatus;
 import com.yeoljeong.tripmate.matching.domain.model.Matching;
 import com.yeoljeong.tripmate.matching.domain.repository.MatchingRepository;
 import com.yeoljeong.tripmate.matching.infrastructure.persistence.jpa.MatchingJpaRepository;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -17,6 +18,11 @@ public class MatchingRepositoryImpl implements MatchingRepository {
 	@Override
 	public boolean existsByHostUserIdAndMatchingStatusOpen(UUID hostId) {
 		return repository.existsByHostUserIdAndStatus(hostId, MatchingStatus.OPEN);
+	}
+
+	@Override
+	public Optional<Matching> findByHostUserIdAndMatchingStatusOpen(UUID hostId) {
+		return repository.findByHostUserIdAndStatus(hostId, MatchingStatus.OPEN);
 	}
 
 	@Override
