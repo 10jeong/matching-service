@@ -5,8 +5,8 @@ import static com.yeoljeong.tripmate.usersetting.presentation.dto.response.const
 import static com.yeoljeong.tripmate.usersetting.presentation.dto.response.constants.UserSettingSuccessCode.DEACTIVATE_MATCHING;
 import static com.yeoljeong.tripmate.usersetting.presentation.dto.response.constants.UserSettingSuccessCode.EDIT_SUCCESS;
 
-import com.yeoljeong.tripmate.auth.LoginUser;
-import com.yeoljeong.tripmate.auth.UserContext;
+import com.yeoljeong.tripmate.auth.annotation.LoginUser;
+import com.yeoljeong.tripmate.auth.context.UserContext;
 import com.yeoljeong.tripmate.response.ApiResponse;
 import com.yeoljeong.tripmate.usersetting.application.UserSettingCommandService;
 import com.yeoljeong.tripmate.usersetting.application.UserSettingQueryService;

@@ -27,6 +27,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class MatchingController {
 
 	private final MatchingCommandService commandService;
+	private final MatchingSseManager sseManager;
 
 	@PostMapping
 	public ResponseEntity<ApiResponse<MatchingDetailResponse>> create(
