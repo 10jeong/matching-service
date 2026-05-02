@@ -32,6 +32,7 @@ public class MatchingSseRedisPublisher implements MatchingCandidateNotifier {
 		} catch (Exception e) {
 			log.error("[MatchingSSE] Redis publish failed - channel: {}, error : {}",
 				channel, e.getMessage());
+			throw e;
 		}
 	}
 
