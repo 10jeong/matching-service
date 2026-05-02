@@ -23,7 +23,15 @@ public class UserSettingEventKafkaPublisher implements UserSettingEventPublisher
 		log.info("[Kafka] matching.candidates.found 발행 - hostUserId: {}, 후보수: {}",
 			hostUserId, candidates.size()); // 추가
 		MatchingCandidatesFoundEvent event = toMatchingCandidatesFoundEvent(hostUserId, candidates);
-		kafkaTemplate.send(MATCHING_CANDIDATES_FOUND_TOPIC, event.hostUserId().toString(), event);
+		kafkaTemplate.send(MATCHING_CANDIDATES_FOUND_TOPIC, event.hostUserId().toString(), event)
+			.whenComplete((result, ex) -> {
+				if (ex != null) {
+					log.error("[Kafka] matching.candidates.found 발행 실패 - hostUserId: {}", event.hostUserId());
+				} else {
+					log.info("[Kafka] matching.candidates.found 발행 성공 - hostUserId: {}",
+						event.hostUserId());
+				}
+			});
 	}
 
 	private MatchingCandidatesFoundEvent toMatchingCandidatesFoundEvent(UUID hostUserId, List<UUID> candidates) {
