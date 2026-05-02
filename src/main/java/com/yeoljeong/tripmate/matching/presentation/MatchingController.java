@@ -10,7 +10,6 @@ import com.yeoljeong.tripmate.matching.presentation.dto.request.CreateMatchingRe
 import com.yeoljeong.tripmate.matching.presentation.dto.response.MatchingDetailResponse;
 import com.yeoljeong.tripmate.response.ApiResponse;
 import jakarta.validation.Valid;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,13 +35,13 @@ public class MatchingController {
 	) {
 		return ResponseEntity.status(CREATE.getStatus()).body(
 			ApiResponse.success(CREATE, MatchingDetailResponse.from(
-				commandService.create(request.toCommand(UUID.fromString(userContext.userId())))
+				commandService.create(request.toCommand(userContext.userId()))
 			))
 		);
 	}
 
 	@GetMapping(value = "/sub", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public SseEmitter subscribe(@LoginUser UserContext userContext) {
-		return sseManager.subscribe(UUID.fromString(userContext.userId()));
+		return sseManager.subscribe(userContext.userId());
 	}
 }
