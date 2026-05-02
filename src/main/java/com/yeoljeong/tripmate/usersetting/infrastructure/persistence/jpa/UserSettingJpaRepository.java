@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface UserSettingJpaRepository extends JpaRepository<UserSetting, UUID> {
 	Optional<UserSetting> findByUserIdAndIsDeletedFalse(UUID userId);
 	boolean existsByUserIdAndIsDeletedFalse(UUID userId);
-	List<UserSetting> findAllByMatchingEnabledTrue();
+	List<UserSetting> findAllByMatchingEnabledTrueAndIsDeletedFalse();
 }

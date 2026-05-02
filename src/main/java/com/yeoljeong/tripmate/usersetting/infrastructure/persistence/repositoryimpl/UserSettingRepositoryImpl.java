@@ -31,8 +31,8 @@ public class UserSettingRepositoryImpl implements UserSettingRepository {
 	}
 
 	@Override
-	public List<UserSetting> findAllByMatchingEnabledTrue() {
-		return userSettingRepository.findAllByMatchingEnabledTrue();
+	public List<UserSetting> findAllByMatchingEnabledTrueIsDeletedFalse() {
+		return userSettingRepository.findAllByMatchingEnabledTrueAndIsDeletedFalse();
 	}
 }
 

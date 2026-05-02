@@ -33,7 +33,7 @@ public class UserSettingQueryService implements FindEnableMatchingUserUsecase {
 
 	@Override
 	public void findAllEnableMatchingUser(MatchingCandidateCriteria criteria) {
-		List<UUID> candidates = userSettingRepository.findAllByMatchingEnabledTrue()
+		List<UUID> candidates = userSettingRepository.findAllByMatchingEnabledTrueIsDeletedFalse()
 			.stream()
 			.map(UserSetting::getUserId)
 			.filter(userId -> !userId.equals(criteria.hostUserId()))
