@@ -33,6 +33,7 @@ public class MatchingRedisSseManager implements MatchingSseManager {
 	public SseEmitter subscribe(UUID userId) {
 		disconnect(userId);
 		SseEmitter emitter = new SseEmitter(TIMEOUT);
+		emitters.put(userId, emitter);
 
 		registerRedisListener(userId, emitter);
 		sendConnectEvent(userId, emitter);
