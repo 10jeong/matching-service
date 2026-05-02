@@ -2,6 +2,7 @@ package com.yeoljeong.tripmate.matching.infrastructure.message;
 
 import com.yeoljeong.tripmate.common.event.MatchingCandidatesFoundEvent;
 import com.yeoljeong.tripmate.event.enums.MatchingTopic;
+import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.matching.application.dto.command.NotifyMatchingCommand;
 import com.yeoljeong.tripmate.matching.application.usecase.NotifyMatchingCandidatesUsecase;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,11 @@ public class MatchingEventListener {
 				new NotifyMatchingCommand(event.hostUserId(), event.userIds())
 			);
 			acknowledgment.acknowledge();
-		} catch (Exception e) {
+		}catch (BusinessException e){
+			log.warn("[Matching] business failure consumed - hostUserId: {}, error: {}",
+				event.hostUserId(), e.getMessage());
+			acknowledgment.acknowledge();
+		}catch (Exception e) {
 			log.error("[Matching] SSE notify failed - hostUserId: {}, error: {}",
 				event.hostUserId(), e.getMessage());
 			throw e;
