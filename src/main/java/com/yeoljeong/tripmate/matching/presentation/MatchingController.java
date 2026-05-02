@@ -35,4 +35,9 @@ public class MatchingController {
 			))
 		);
 	}
+
+	@GetMapping(value = "/sub", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	public SseEmitter subscribe(@LoginUser UserContext userContext) {
+		return sseManager.subscribe(UUID.fromString(userContext.userId()));
+	}
 }
