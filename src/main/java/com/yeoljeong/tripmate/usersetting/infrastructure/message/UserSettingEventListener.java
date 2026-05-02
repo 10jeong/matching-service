@@ -71,6 +71,10 @@ public class UserSettingEventListener {
 				)
 			);
 			acknowledgment.acknowledge();
+		} catch (BusinessException e) {
+			log.warn("[UserSetting] matching user finding skipped (business error): userId: {}, error: {}",
+				event.hostUserId(), e.getMessage());
+			acknowledgment.acknowledge();
 		} catch (Exception e) {
 			log.warn("[UserSetting] Retry scheduled for matching user finding (unknown error): userId: {}, error: {}",
 				event.hostUserId(), e.getMessage());
