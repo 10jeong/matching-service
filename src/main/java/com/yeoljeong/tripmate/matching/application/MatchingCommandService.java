@@ -3,6 +3,7 @@ package com.yeoljeong.tripmate.matching.application;
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.matching.application.dto.command.CreateMatchingCommand;
 import com.yeoljeong.tripmate.matching.application.dto.result.MatchingDetailResult;
+import com.yeoljeong.tripmate.matching.application.external.MatchingEventPublisher;
 import com.yeoljeong.tripmate.matching.domain.exception.MatchingErrorCode;
 import com.yeoljeong.tripmate.matching.domain.model.Location;
 import com.yeoljeong.tripmate.matching.domain.model.Matching;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MatchingCommandService {
 
 	private final MatchingRepository repository;
+	private final MatchingEventPublisher publisher;
 
 	public MatchingDetailResult create(CreateMatchingCommand command) {
 		if (repository.existsByHostUserIdAndMatchingStatusOpen(command.userId())) {
@@ -32,10 +34,12 @@ public class MatchingCommandService {
 			MatchingPeriod.of(command.scheduledAt(), command.recruitedAt()),
 			command.chatUrl(),
 			MatchingSetting.of(
-				command.ie(), command.sn(), command.tf(), command.pj(), command.preferenceGender(), command.allowSmoking()
+				command.ie(), command.sn(), command.tf(), command.pj(),
+				command.preferenceGender(), command.allowSmoking()
 			)
 		);
-
-		return MatchingDetailResult.from(repository.save(matching));
+		Matching saved = repository.save(matching);
+		publisher.publishMatchingCreated(saved);
+		return MatchingDetailResult.from(saved);
 	}
 }

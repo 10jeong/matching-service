@@ -13,6 +13,7 @@ public enum MatchingErrorCode implements ErrorCode {
 	LOCATION_REQUIRED(HttpStatus.BAD_REQUEST, "위도와 경도는 모두 입력해야 합니다."),
 	INVALID_LATITUDE_RANGE(HttpStatus.BAD_REQUEST, "위도(lat)는 -90 이상 90 이하의 값이어야 합니다."),
 	INVALID_LONGITUDE_RANGE(HttpStatus.BAD_REQUEST, "경도(lng)는 -180 이상 180 이하의 값이어야 합니다."),
+	NO_ACTIVE_MATCHING(HttpStatus.NOT_FOUND, "진행 중인 매칭정보가 없습니다."),
 	;
 	private final HttpStatus status;
 	private final String message;

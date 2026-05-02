@@ -2,8 +2,8 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAPS}
     consumer:
-      group-id: user-setting-group
-      auto-offset-reset: earliest
+      group-id: matching-group
+      auto-offset-reset: latest
       enable-auto-commit: false
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
