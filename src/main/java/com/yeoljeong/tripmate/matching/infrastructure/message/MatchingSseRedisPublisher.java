@@ -3,6 +3,7 @@ package com.yeoljeong.tripmate.matching.infrastructure.message;
 import com.yeoljeong.tripmate.common.message.MatchingSsePayload;
 import com.yeoljeong.tripmate.matching.application.external.MatchingCandidateNotifier;
 import com.yeoljeong.tripmate.matching.domain.model.Matching;
+import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -25,14 +26,20 @@ public class MatchingSseRedisPublisher implements MatchingCandidateNotifier {
 	}
 
 	private void publish(UUID userId, Matching matching) {
+		String guardKey = "sse:sent:" + matching.getId() + ":" + userId;
+		Boolean isNew = redisTemplate.opsForValue()
+			.setIfAbsent(guardKey, "1", Duration.ofMinutes(10));
+
+		if (Boolean.FALSE.equals(isNew)) {
+			log.debug("[MatchingSSE] 중복 발송 방지 - userId: {}, matchingId: {}", userId, matching.getId());
+			return;
+		}
+
 		String channel = CHANNEL_PREFIX + userId;
-		log.info("[Redis] SSE 발행 - channel: {}", channel); // 추가
 		try {
 			redisTemplate.convertAndSend(channel, toMatchingSsePayload(matching));
 		} catch (Exception e) {
-			log.error("[MatchingSSE] Redis publish failed - channel: {}, error : {}",
-				channel, e.getMessage());
-			throw e;
+			log.error("[MatchingSSE] Redis publish failed - channel: {}, error : {}", channel, e.getMessage());
 		}
 	}
 
