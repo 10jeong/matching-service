@@ -9,6 +9,7 @@ import com.yeoljeong.tripmate.usersetting.application.external.UserSettingEventP
 import com.yeoljeong.tripmate.usersetting.application.usecase.FindEnableMatchingUserUsecase;
 import com.yeoljeong.tripmate.usersetting.domain.model.UserSetting;
 import com.yeoljeong.tripmate.usersetting.domain.repository.UserSettingRepository;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,8 @@ public class UserSettingQueryService implements FindEnableMatchingUserUsecase {
 	}
 
 	@Override
-	public void findAllEnableMatchingUser(MatchingCandidateCriteria criteria) {
+	public void findAllEnableMatchingUser(MatchingCandidateCriteria criteria)
+		throws NoSuchAlgorithmException {
 		List<UUID> candidates = userSettingRepository.findAllByMatchingEnabledTrueIsDeletedFalse()
 			.stream()
 			.map(UserSetting::getUserId)

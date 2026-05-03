@@ -11,6 +11,7 @@ import com.yeoljeong.tripmate.usersetting.application.dto.command.CreateUserSett
 import com.yeoljeong.tripmate.usersetting.application.dto.command.MatchingCandidateCriteria;
 import com.yeoljeong.tripmate.usersetting.application.usecase.CreateUserSettingUsecase;
 import com.yeoljeong.tripmate.usersetting.application.usecase.FindEnableMatchingUserUsecase;
+import java.security.NoSuchAlgorithmException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -75,6 +76,8 @@ public class UserSettingEventListener {
 			log.warn("[UserSetting] matching user finding skipped (business error): userId: {}, error: {}",
 				event.hostUserId(), e.getMessage());
 			acknowledgment.acknowledge();
+		} catch (NoSuchAlgorithmException ignore) {
+			log.warn("[UserSetting] matching user finding skipped (algorithm error): userId: {}", event.hostUserId());
 		} catch (Exception e) {
 			log.warn("[UserSetting] Retry scheduled for matching user finding (unknown error): userId: {}, error: {}",
 				event.hostUserId(), e.getMessage());
