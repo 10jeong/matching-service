@@ -46,9 +46,9 @@ public class MatchingController {
 	@GetMapping(value = "/sub", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public SseEmitter subscribe(
 		@LoginUser UserContext userContext,
-		@Valid @ModelAttribute UserMatchingCriteriaRequest reqeust
+		@Valid @ModelAttribute UserMatchingCriteriaRequest request
 	) {
 		return subscriptionService.
-			subscribe(reqeust.toCommand(userContext.userId()));
+			subscribe(request.toCommand(userContext.userId()));
 	}
 }
