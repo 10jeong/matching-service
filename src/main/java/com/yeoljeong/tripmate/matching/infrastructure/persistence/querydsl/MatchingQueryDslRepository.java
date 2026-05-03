@@ -11,6 +11,7 @@ import com.yeoljeong.tripmate.matching.domain.constants.PreferenceMbtiTF;
 import com.yeoljeong.tripmate.matching.domain.model.Matching;
 import com.yeoljeong.tripmate.matching.domain.model.QMatching;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -42,39 +43,49 @@ public class MatchingQueryDslRepository {
 	private BooleanExpression genderCondition(String gender) {
 		if (gender == null) return null;
 		return matching.matchingSetting.preferenceGender.eq(PreferenceGender.BOTH)
-			.or(matching.matchingSetting.preferenceGender.eq(PreferenceGender.valueOf(gender)));
+			.or(matching.matchingSetting.preferenceGender.eq(
+				PreferenceGender.valueOf(gender.trim().toUpperCase(Locale.ROOT)))
+			);
 	}
 	private BooleanExpression mbtiCondition(String mbtiIE, String mbtiSN, String mbtiTF, String mbtiPJ) {
 		BooleanExpression condition = null;
 
 		if (mbtiIE != null) {
-			condition = mbtiIE.equals("UNKNOWN")
+			condition = mbtiIE.equalsIgnoreCase("UNKNOWN")
 				? matching.matchingSetting.preferenceMbtiIE.eq(PreferenceMbtiIE.BOTH)
 				: matching.matchingSetting.preferenceMbtiIE.eq(PreferenceMbtiIE.BOTH)
-					.or(matching.matchingSetting.preferenceMbtiIE.eq(PreferenceMbtiIE.valueOf(mbtiIE.toUpperCase())));
+					.or(matching.matchingSetting.preferenceMbtiIE.eq(
+						PreferenceMbtiIE.valueOf(mbtiIE.trim().toUpperCase(Locale.ROOT)))
+					);
 		}
 
 		if (mbtiSN != null) {
-			BooleanExpression snCondition = mbtiSN.equals("UNKNOWN")
+			BooleanExpression snCondition = mbtiSN.equalsIgnoreCase("UNKNOWN")
 				? matching.matchingSetting.preferenceMbtiSN.eq(PreferenceMbtiSN.BOTH)
 				: matching.matchingSetting.preferenceMbtiSN.eq(PreferenceMbtiSN.BOTH)
-					.or(matching.matchingSetting.preferenceMbtiSN.eq(PreferenceMbtiSN.valueOf(mbtiSN)));
+					.or(matching.matchingSetting.preferenceMbtiSN.eq(
+						PreferenceMbtiSN.valueOf(mbtiSN.trim().toUpperCase(Locale.ROOT)))
+					);
 			condition = condition == null ? snCondition : condition.and(snCondition);
 		}
 
 		if (mbtiTF != null) {
-			BooleanExpression tfCondition = mbtiTF.equals("UNKNOWN")
+			BooleanExpression tfCondition = mbtiTF.equalsIgnoreCase("UNKNOWN")
 				? matching.matchingSetting.preferenceMbtiTF.eq(PreferenceMbtiTF.BOTH)
 				: matching.matchingSetting.preferenceMbtiTF.eq(PreferenceMbtiTF.BOTH)
-					.or(matching.matchingSetting.preferenceMbtiTF.eq(PreferenceMbtiTF.valueOf(mbtiTF)));
+					.or(matching.matchingSetting.preferenceMbtiTF.eq(
+						PreferenceMbtiTF.valueOf(mbtiTF.trim().toUpperCase(Locale.ROOT)))
+					);
 			condition = condition == null ? tfCondition : condition.and(tfCondition);
 		}
 
 		if (mbtiPJ != null) {
-			BooleanExpression pjCondition = mbtiPJ.equals("UNKNOWN")
+			BooleanExpression pjCondition = mbtiPJ.equalsIgnoreCase("UNKNOWN")
 				? matching.matchingSetting.preferenceMbtiPJ.eq(PreferenceMbtiPJ.BOTH)
 				: matching.matchingSetting.preferenceMbtiPJ.eq(PreferenceMbtiPJ.BOTH)
-					.or(matching.matchingSetting.preferenceMbtiPJ.eq(PreferenceMbtiPJ.valueOf(mbtiPJ)));
+					.or(matching.matchingSetting.preferenceMbtiPJ.eq(
+						PreferenceMbtiPJ.valueOf(mbtiPJ.trim().toUpperCase(Locale.ROOT)))
+					);
 			condition = condition == null ? pjCondition : condition.and(pjCondition);
 		}
 
