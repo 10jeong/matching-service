@@ -21,7 +21,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class MatchingRedisSseManager implements MatchingSseManager {
 
 	private final static String CHANNEL_PREFIX = "matching:sse:";
-	private final static long TIMEOUT = 30 * 1000L;
+	private final static long TIMEOUT = 10 * 60 * 1000L;
 
 	private final Map<UUID, SseEmitter> emitters = new ConcurrentHashMap<>();
 	private final Map<UUID, MessageListener> listeners = new ConcurrentHashMap<>();
