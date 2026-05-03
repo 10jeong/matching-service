@@ -1,6 +1,6 @@
 package com.yeoljeong.tripmate.matching.infrastructure.message;
 
-import com.yeoljeong.tripmate.common.event.MatchingCandidatesFoundEvent;
+import com.yeoljeong.tripmate.event.MatchingCandidatesFoundEvent;
 import com.yeoljeong.tripmate.event.enums.MatchingTopic;
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.matching.application.dto.command.NotifyMatchingCommand;
