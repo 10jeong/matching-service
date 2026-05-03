@@ -10,6 +10,7 @@ import com.yeoljeong.tripmate.matching.presentation.dto.request.CreateMatchingRe
 import com.yeoljeong.tripmate.matching.presentation.dto.response.MatchingDetailResponse;
 import com.yeoljeong.tripmate.response.ApiResponse;
 import jakarta.validation.Valid;
+import java.security.NoSuchAlgorithmException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class MatchingController {
 	public ResponseEntity<ApiResponse<MatchingDetailResponse>> create(
 		@LoginUser UserContext userContext,
 		@Valid @RequestBody CreateMatchingRequest request
-	) {
+	) throws NoSuchAlgorithmException {
 		return ResponseEntity.status(CREATE.getStatus()).body(
 			ApiResponse.success(CREATE, MatchingDetailResponse.from(
 				commandService.create(request.toCommand(userContext.userId()))

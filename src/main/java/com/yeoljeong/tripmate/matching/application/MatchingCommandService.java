@@ -10,6 +10,7 @@ import com.yeoljeong.tripmate.matching.domain.model.Matching;
 import com.yeoljeong.tripmate.matching.domain.model.MatchingPeriod;
 import com.yeoljeong.tripmate.matching.domain.model.MatchingSetting;
 import com.yeoljeong.tripmate.matching.domain.repository.MatchingRepository;
+import java.security.NoSuchAlgorithmException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,8 @@ public class MatchingCommandService {
 	private final MatchingRepository repository;
 	private final MatchingEventPublisher publisher;
 
-	public MatchingDetailResult create(CreateMatchingCommand command) {
+	public MatchingDetailResult create(CreateMatchingCommand command)
+		throws NoSuchAlgorithmException {
 		if (repository.existsByHostUserIdAndMatchingStatusOpen(command.userId())) {
 			throw new BusinessException(MatchingErrorCode.MATCHING_ALREADY_IN_PROGRESS);
 		}

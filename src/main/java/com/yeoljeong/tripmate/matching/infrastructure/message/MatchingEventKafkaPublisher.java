@@ -1,9 +1,11 @@
 package com.yeoljeong.tripmate.matching.infrastructure.message;
 
+import com.yeoljeong.tripmate.event.EventUtils;
 import com.yeoljeong.tripmate.event.MatchingCreateEvent;
 import com.yeoljeong.tripmate.event.enums.MatchingTopic;
 import com.yeoljeong.tripmate.matching.application.external.MatchingEventPublisher;
 import com.yeoljeong.tripmate.matching.domain.model.Matching;
+import java.security.NoSuchAlgorithmException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -17,7 +19,7 @@ public class MatchingEventKafkaPublisher implements MatchingEventPublisher {
 	private final KafkaTemplate<String, Object> kafkaTemplate;
 
 	@Override
-	public void publishMatchingCreated(Matching matching) {
+	public void publishMatchingCreated(Matching matching) throws NoSuchAlgorithmException {
 		MatchingCreateEvent event = toMatchingCreatedEvent(matching);
 		kafkaTemplate.send(MatchingTopic.MATCHING_CREATED_TOPIC, event.matchingId().toString(), event)
 			.whenComplete((result, ex) -> {
@@ -29,8 +31,10 @@ public class MatchingEventKafkaPublisher implements MatchingEventPublisher {
 			});
 	}
 
-	private MatchingCreateEvent toMatchingCreatedEvent(Matching matching) {
+	private MatchingCreateEvent toMatchingCreatedEvent(Matching matching)
+		throws NoSuchAlgorithmException {
 		return new MatchingCreateEvent(
+			EventUtils.getEventHash("matching", matching.getId().toString(), matching.getUpdatedAt()),
 			matching.getId(), matching.getHostUserId(), matching.getTitle(),
 			matching.getMatchingSetting().isAllowSmoking(),
 			matching.getMatchingSetting().getPreferenceMbtiIE().name(),
