@@ -1,5 +1,6 @@
 package com.yeoljeong.tripmate.matching.domain.model;
 
+import com.yeoljeong.tripmate.domain.BaseAuditEntity;
 import com.yeoljeong.tripmate.matching.domain.constants.MatchingStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "matching")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Matching {
+public class Matching extends BaseAuditEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
