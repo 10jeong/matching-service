@@ -5,8 +5,9 @@ import static com.yeoljeong.tripmate.response.constants.CommonSuccessCode.CREATE
 import com.yeoljeong.tripmate.auth.annotation.LoginUser;
 import com.yeoljeong.tripmate.auth.context.UserContext;
 import com.yeoljeong.tripmate.matching.application.MatchingCommandService;
-import com.yeoljeong.tripmate.matching.application.external.MatchingSseManager;
+import com.yeoljeong.tripmate.matching.application.SseSubscriptionService;
 import com.yeoljeong.tripmate.matching.presentation.dto.request.CreateMatchingRequest;
+import com.yeoljeong.tripmate.matching.presentation.dto.request.UserMatchingCriteriaRequest;
 import com.yeoljeong.tripmate.matching.presentation.dto.response.MatchingDetailResponse;
 import com.yeoljeong.tripmate.response.ApiResponse;
 import jakarta.validation.Valid;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +29,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class MatchingController {
 
 	private final MatchingCommandService commandService;
-	private final MatchingSseManager sseManager;
+	private final SseSubscriptionService subscriptionService;
 
 	@PostMapping
 	public ResponseEntity<ApiResponse<MatchingDetailResponse>> create(
@@ -42,7 +44,11 @@ public class MatchingController {
 	}
 
 	@GetMapping(value = "/sub", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-	public SseEmitter subscribe(@LoginUser UserContext userContext) {
-		return sseManager.subscribe(userContext.userId());
+	public SseEmitter subscribe(
+		@LoginUser UserContext userContext,
+		@Valid @ModelAttribute UserMatchingCriteriaRequest request
+	) {
+		return subscriptionService.
+			subscribe(request.toCommand(userContext.userId()));
 	}
 }

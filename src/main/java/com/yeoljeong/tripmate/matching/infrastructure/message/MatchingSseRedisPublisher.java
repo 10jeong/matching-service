@@ -1,7 +1,7 @@
 package com.yeoljeong.tripmate.matching.infrastructure.message;
 
 import com.yeoljeong.tripmate.common.message.MatchingSsePayload;
-import com.yeoljeong.tripmate.matching.application.external.MatchingCandidateNotifier;
+import com.yeoljeong.tripmate.matching.application.external.MatchingNotifier;
 import com.yeoljeong.tripmate.matching.domain.model.Matching;
 import java.time.Duration;
 import java.util.List;
@@ -14,19 +14,25 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class MatchingSseRedisPublisher implements MatchingCandidateNotifier {
+public class MatchingSseRedisPublisher implements MatchingNotifier {
 
 	private final static String CHANNEL_PREFIX = "matching:sse:";
+	private static final String GUARD_KEY_PREFIX = "sse:sent:";
 
 	private final RedisTemplate<String, Object> redisTemplate;
 
 	@Override
 	public void publishToUsers(List<UUID> userIds, Matching matching) {
-		userIds.forEach(userId -> publish(userId, matching));
+		userIds.forEach(userId -> publishWithGuard(userId, matching));
 	}
 
-	private void publish(UUID userId, Matching matching) {
-		String guardKey = "sse:sent:" + matching.getId() + ":" + userId;
+	@Override
+	public void publishToUserDirect(UUID userId, Matching matching) {
+		publish(userId, matching);
+	}
+
+	private void publishWithGuard(UUID userId, Matching matching) {
+		String guardKey = GUARD_KEY_PREFIX + matching.getId() + ":" + userId;
 		Boolean isNew = redisTemplate.opsForValue()
 			.setIfAbsent(guardKey, "1", Duration.ofMinutes(10));
 
@@ -34,6 +40,10 @@ public class MatchingSseRedisPublisher implements MatchingCandidateNotifier {
 			log.debug("[MatchingSSE] 중복 발송 방지 - userId: {}, matchingId: {}", userId, matching.getId());
 			return;
 		}
+		publish(userId, matching);
+	}
+
+	private void publish(UUID userId, Matching matching) {
 
 		String channel = CHANNEL_PREFIX + userId;
 		try {
