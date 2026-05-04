@@ -38,7 +38,8 @@ public class MatchingEventKafkaPublisher implements MatchingEventPublisher {
 		kafkaTemplate.send(MatchingTopic.MATCHING_MATCHED_TOPIC, event.matchingId().toString(), event)
 			.whenComplete((result, ex) -> {
 				if (ex != null) {
-					log.error("[MATCHING_KAFKA_PUBLISHER] matching.matched 발행 실패 - matchingId: {}", event.matchingId());
+					//TODO 아웃박스 적용 필요, 현재는 로그만 기록, 이벤트 유실 가능성 농후
+					log.error("[MATCHING_KAFKA_PUBLISHER] matching.matched 발행 실패 - matchingId: {}", event.matchingId(), ex);
 				}
 			});
 	}
