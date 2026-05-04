@@ -1,6 +1,10 @@
 package com.yeoljeong.tripmate.matching.domain.model;
 
+import static com.yeoljeong.tripmate.matching.domain.exception.MatchingErrorCode.HOST_CANNOT_ACCEPT_OWN_MATCHING;
+import static com.yeoljeong.tripmate.matching.domain.exception.MatchingErrorCode.MATCHING_ALREADY_MATCHED;
+
 import com.yeoljeong.tripmate.domain.BaseAuditEntity;
+import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.matching.domain.constants.MatchingStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -28,6 +32,9 @@ public class Matching extends BaseAuditEntity {
 
 	@Column(nullable = false)
 	private UUID hostUserId;
+
+	@Column
+	private UUID mateUserId;
 
 	@Column(nullable = false, length = 50)
 	private String title;
@@ -70,5 +77,16 @@ public class Matching extends BaseAuditEntity {
 		matching.status = MatchingStatus.OPEN;
 		matching.matchingSetting = matchingSetting;
 		return matching;
+	}
+
+	public void accept(UUID userId) {
+		if (this.hostUserId.equals(userId)) {
+			throw new BusinessException(HOST_CANNOT_ACCEPT_OWN_MATCHING);
+		}
+		if (this.status == MatchingStatus.MATCHED) {
+			throw new BusinessException(MATCHING_ALREADY_MATCHED);
+		}
+		this.mateUserId = userId;
+		this.status = MatchingStatus.MATCHED;
 	}
 }
