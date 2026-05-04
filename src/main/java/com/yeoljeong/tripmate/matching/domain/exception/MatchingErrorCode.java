@@ -14,6 +14,8 @@ public enum MatchingErrorCode implements ErrorCode {
 	INVALID_LATITUDE_RANGE(HttpStatus.BAD_REQUEST, "위도(lat)는 -90 이상 90 이하의 값이어야 합니다."),
 	INVALID_LONGITUDE_RANGE(HttpStatus.BAD_REQUEST, "경도(lng)는 -180 이상 180 이하의 값이어야 합니다."),
 	NO_ACTIVE_MATCHING(HttpStatus.NOT_FOUND, "진행 중인 매칭정보가 없습니다."),
+	HOST_CANNOT_ACCEPT_OWN_MATCHING(HttpStatus.BAD_REQUEST, "호스트 본인의 매칭을 수락할 수 없습니다."),
+	MATCHING_ALREADY_MATCHED(HttpStatus.CONFLICT, "이미 매칭이 완성된 방입니다"),
 	;
 	private final HttpStatus status;
 	private final String message;
