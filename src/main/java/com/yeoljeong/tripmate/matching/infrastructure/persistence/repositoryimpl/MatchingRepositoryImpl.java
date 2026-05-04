@@ -41,4 +41,9 @@ public class MatchingRepositoryImpl implements MatchingRepository {
 			mbtiIE, mbtiSN, mbtiTF, mbtiPJ
 		);
 	}
+
+	@Override
+	public Optional<Matching> findByIdAndIsDeletedFalse(UUID matchingId) {
+		return repository.findByIdAndIsDeletedFalse(matchingId);
+	}
 }

@@ -11,4 +11,5 @@ public interface MatchingRepository {
 	Matching save(Matching matching);
 	List<Matching> findAllByCriteria(UUID userId, String gender, boolean isSmoking,
 		String mbtiIE, String mbtiSN, String mbtiTF, String mbtiPJ);
+	Optional<Matching> findByIdAndIsDeletedFalse(UUID matchingId);
 }
