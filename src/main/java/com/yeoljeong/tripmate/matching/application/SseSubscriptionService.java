@@ -6,6 +6,7 @@ import com.yeoljeong.tripmate.matching.application.external.MatchingSseManager;
 import com.yeoljeong.tripmate.matching.domain.model.Matching;
 import com.yeoljeong.tripmate.matching.domain.repository.MatchingRepository;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,5 +33,10 @@ public class SseSubscriptionService {
 			matching -> candidateNotifier.publishToUserDirect(command.userId(), matching)
 		);
 		return emitter;
+	}
+
+	@Transactional(readOnly = true)
+	public SseEmitter subscribe(UUID userId) {
+		return sseManager.subscribe(userId);
 	}
 }

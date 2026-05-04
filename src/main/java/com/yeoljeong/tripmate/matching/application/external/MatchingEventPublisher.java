@@ -5,4 +5,5 @@ import java.security.NoSuchAlgorithmException;
 
 public interface MatchingEventPublisher {
 	void publishMatchingCreated(Matching matching) throws NoSuchAlgorithmException;
+	void publishMatchingAccomplished(Matching matching);
 }

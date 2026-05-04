@@ -11,6 +11,7 @@ import com.yeoljeong.tripmate.matching.domain.model.MatchingPeriod;
 import com.yeoljeong.tripmate.matching.domain.model.MatchingSetting;
 import com.yeoljeong.tripmate.matching.domain.repository.MatchingRepository;
 import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,5 +44,12 @@ public class MatchingCommandService {
 		Matching saved = repository.save(matching);
 		publisher.publishMatchingCreated(saved);
 		return MatchingDetailResult.from(saved);
+	}
+
+	public void accept(UUID userId, UUID matchingId) {
+		Matching matching = repository.findByIdAndIsDeletedFalse(matchingId)
+			.orElseThrow(() -> new BusinessException(MatchingErrorCode.NO_ACTIVE_MATCHING));
+		matching.accept(userId);
+		publisher.publishMatchingAccomplished(matching);
 	}
 }

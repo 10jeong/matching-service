@@ -2,6 +2,7 @@ package com.yeoljeong.tripmate.matching.infrastructure.message;
 
 import com.yeoljeong.tripmate.event.EventUtils;
 import com.yeoljeong.tripmate.event.MatchingCreateEvent;
+import com.yeoljeong.tripmate.event.MatchingMatchedEvent;
 import com.yeoljeong.tripmate.event.enums.MatchingTopic;
 import com.yeoljeong.tripmate.matching.application.external.MatchingEventPublisher;
 import com.yeoljeong.tripmate.matching.domain.model.Matching;
@@ -29,6 +30,30 @@ public class MatchingEventKafkaPublisher implements MatchingEventPublisher {
 					log.info("[Kafka] matching.created 발행 성공 - matchingId: {}", event.matchingId());
 				}
 			});
+	}
+
+	@Override
+	public void publishMatchingAccomplished(Matching matching) {
+		MatchingMatchedEvent event = toMatchingMatchedEvent(matching);
+		kafkaTemplate.send(MatchingTopic.MATCHING_MATCHED_TOPIC, event.matchingId().toString(), event)
+			.whenComplete((result, ex) -> {
+				if (ex != null) {
+					//TODO 아웃박스 적용 필요, 현재는 로그만 기록, 이벤트 유실 가능성 농후
+					log.error("[MATCHING_KAFKA_PUBLISHER] matching.matched 발행 실패 - matchingId: {}", event.matchingId(), ex);
+				}
+			});
+	}
+
+	private MatchingMatchedEvent toMatchingMatchedEvent(Matching matching) {
+		try {
+			return new MatchingMatchedEvent(
+				EventUtils.getEventHash("matching", matching.getId().toString(), matching.getUpdatedAt()),
+				matching.getId(), matching.getHostUserId(), matching.getMateUserId(), matching.getTitle()
+			);
+		} catch (NoSuchAlgorithmException e) {
+			log.error("[MATCHING_KAFKA_PUBLISHER] matching.matched 이벤트 해시 생성 실패 - matching id: {}", matching.getId());
+			throw new RuntimeException(e);
+		}
 	}
 
 	private MatchingCreateEvent toMatchingCreatedEvent(Matching matching)
