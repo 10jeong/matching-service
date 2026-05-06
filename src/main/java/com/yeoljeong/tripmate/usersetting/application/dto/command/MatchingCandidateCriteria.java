@@ -3,6 +3,7 @@ package com.yeoljeong.tripmate.usersetting.application.dto.command;
 import java.util.UUID;
 
 public record MatchingCandidateCriteria(
+	UUID matchingId,
 	UUID hostUserId,
 	boolean allowSmoking,
 	String preferenceMbtiIE,

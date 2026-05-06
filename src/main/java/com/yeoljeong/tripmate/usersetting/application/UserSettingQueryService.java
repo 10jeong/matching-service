@@ -42,6 +42,6 @@ public class UserSettingQueryService implements FindEnableMatchingUserUsecase {
 			.filter(userId -> !userId.equals(criteria.hostUserId()))
 			.toList();
 		log.info("[UserSetting] 후보 유저 수: {}", candidates.size()); // 추가
-		publisher.publishMatchingCandidates(criteria.hostUserId(), candidates);
+		publisher.publishMatchingCandidates(criteria.matchingId(), criteria.hostUserId(), candidates);
 	}
 }

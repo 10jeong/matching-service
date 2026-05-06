@@ -22,11 +22,11 @@ public class UserSettingEventKafkaPublisher implements UserSettingEventPublisher
 	private final KafkaTemplate<String, Object> kafkaTemplate;
 
 	@Override
-	public void publishMatchingCandidates(UUID hostUserId, List<UUID> candidates)
+	public void publishMatchingCandidates(UUID matchingId, UUID hostUserId, List<UUID> candidates)
 		throws NoSuchAlgorithmException {
 		log.info("[Kafka] matching.candidates.found 발행 - hostUserId: {}, 후보수: {}",
 			hostUserId, candidates.size()); // 추가
-		MatchingCandidatesFoundEvent event = toMatchingCandidatesFoundEvent(hostUserId, candidates);
+		MatchingCandidatesFoundEvent event = toMatchingCandidatesFoundEvent(matchingId, hostUserId, candidates);
 		kafkaTemplate.send(MATCHING_CANDIDATES_FOUND_TOPIC, event.hostUserId().toString(), event)
 			.whenComplete((result, ex) -> {
 				if (ex != null) {
@@ -38,11 +38,11 @@ public class UserSettingEventKafkaPublisher implements UserSettingEventPublisher
 			});
 	}
 
-	private MatchingCandidatesFoundEvent toMatchingCandidatesFoundEvent(UUID hostUserId, List<UUID> candidates)
+	private MatchingCandidatesFoundEvent toMatchingCandidatesFoundEvent(UUID matchingId, UUID hostUserId, List<UUID> candidates)
 		throws NoSuchAlgorithmException {
 		return new MatchingCandidatesFoundEvent(
 			EventUtils.getEventHash("matching", String.valueOf(hostUserId), LocalDateTime.now()),
-			hostUserId, candidates
+			matchingId, hostUserId, candidates
 		);
 	}
 }
