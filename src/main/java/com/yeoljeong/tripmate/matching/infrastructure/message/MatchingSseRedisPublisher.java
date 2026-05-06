@@ -1,5 +1,6 @@
 package com.yeoljeong.tripmate.matching.infrastructure.message;
 
+import com.yeoljeong.tripmate.common.message.MatchingMatchedPayload;
 import com.yeoljeong.tripmate.common.message.MatchingSsePayload;
 import com.yeoljeong.tripmate.matching.application.external.MatchingNotifier;
 import com.yeoljeong.tripmate.matching.domain.model.Matching;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 public class MatchingSseRedisPublisher implements MatchingNotifier {
 
 	private final static String CHANNEL_PREFIX = "matching:sse:";
+	private final static String CLOSED_CHANNEL_PREFIX = "matching:sse:closed:";
 	private static final String GUARD_KEY_PREFIX = "sse:sent:";
 
 	private final RedisTemplate<String, Object> redisTemplate;
@@ -29,6 +31,17 @@ public class MatchingSseRedisPublisher implements MatchingNotifier {
 	@Override
 	public void publishToUserDirect(UUID userId, Matching matching) {
 		publish(userId, matching);
+	}
+
+	@Override
+	public void publishClosedToUser(UUID userId, UUID matchingId) {
+		String channel = CLOSED_CHANNEL_PREFIX + userId;
+		try {
+			redisTemplate.convertAndSend(channel, new MatchingMatchedPayload(matchingId));
+			log.debug("[MatchingSSE] 매칭 종료 전송 - userId: {}, matchingId: {}", userId, matchingId);
+		} catch (Exception e) {
+			log.error("[MatchingSSE] 매칭 종료 전송 실패 - channel: {}, error : {}]", channel, e.getMessage(), e);
+		}
 	}
 
 	private void publishWithGuard(UUID userId, Matching matching) {
