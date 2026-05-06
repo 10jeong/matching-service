@@ -29,7 +29,7 @@ public class UserSettingEventListener {
 
 	@KafkaListener(
 		topics = UserTopic.USER_CREATED_TOPIC,
-		groupId = "${spring.kafka.consumer.group-id}",
+		groupId = "matching-usersetting-group",
 		containerFactory = "kafkaListenerContainerFactory"
 	)
 	public void create(@Payload UserCreatedEvent event, Acknowledgment acknowledgment) {
