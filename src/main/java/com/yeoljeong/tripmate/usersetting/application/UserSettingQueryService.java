@@ -35,7 +35,8 @@ public class UserSettingQueryService implements FindEnableMatchingUserUsecase {
 	@Override
 	public void findAllEnableMatchingUser(MatchingCandidateCriteria criteria)
 		throws NoSuchAlgorithmException {
-		List<UUID> candidates = userSettingRepository.findAllByMatchingEnabledTrueIsDeletedFalse()
+		List<UUID> candidates = userSettingRepository.findCandidateByCriteria(criteria.hostUserId(), criteria.preferenceGender(), criteria.allowSmoking(),
+				criteria.preferenceMbtiIE(), criteria.preferenceMbtiSN(), criteria.preferenceMbtiTF(), criteria.preferenceMbtiPJ())
 			.stream()
 			.map(UserSetting::getUserId)
 			.filter(userId -> !userId.equals(criteria.hostUserId()))
