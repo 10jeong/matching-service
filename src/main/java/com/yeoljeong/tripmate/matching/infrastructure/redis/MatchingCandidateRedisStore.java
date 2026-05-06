@@ -35,9 +35,6 @@ public class MatchingCandidateRedisStore implements MatchingCandidateStore {
 					log.warn("[Redis] recruitDeadline이 이미 지남 - matchingId: {}", matching.getId());
 					return;
 				}
-				candidateIds.forEach(userId ->
-					redisTemplate.opsForSet().add(key, userId.toString())
-				);
 				String[] candidateIdsStr = candidateIds.stream()
 					.map(UUID::toString)
 					.toArray(String[]::new);
