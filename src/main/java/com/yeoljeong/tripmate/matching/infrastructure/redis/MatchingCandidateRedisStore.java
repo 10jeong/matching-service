@@ -31,11 +31,19 @@ public class MatchingCandidateRedisStore implements MatchingCandidateStore {
 					LocalDateTime.now(),
 					matching.getMatchingPeriod().getRecruitDeadline()
 				);
+				if (ttl.isNegative() || ttl.isZero()) {
+					log.warn("[Redis] recruitDeadline이 이미 지남 - matchingId: {}", matching.getId());
+					return;
+				}
 				candidateIds.forEach(userId ->
 					redisTemplate.opsForSet().add(key, userId.toString())
 				);
+				String[] candidateIdsStr = candidateIds.stream()
+					.map(UUID::toString)
+					.toArray(String[]::new);
+				redisTemplate.opsForSet().add(key, candidateIdsStr);
 				redisTemplate.expire(key, ttl);
-				log.debug("[Redis] candidats 저장 - matchingId: {}, 후보수: {}",
+				log.debug("[Redis] candidates 저장 - matchingId: {}, 후보수: {}",
 					matching.getId(), candidateIds.size());
 			});
 	}
