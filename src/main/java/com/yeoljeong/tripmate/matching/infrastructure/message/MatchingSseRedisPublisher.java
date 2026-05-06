@@ -41,6 +41,7 @@ public class MatchingSseRedisPublisher implements MatchingNotifier {
 			log.debug("[MatchingSSE] 매칭 종료 전송 - userId: {}, hostUserId: {}", userId, hostUserId);
 		} catch (Exception e) {
 			log.error("[MatchingSSE] 매칭 종료 전송 실패 - channel: {}, error : {}]", channel, e.getMessage(), e);
+			throw e;
 		}
 	}
 
