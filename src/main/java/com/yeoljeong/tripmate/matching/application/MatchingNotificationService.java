@@ -4,10 +4,13 @@ import static com.yeoljeong.tripmate.matching.domain.exception.MatchingErrorCode
 
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.matching.application.dto.command.NotifyMatchingCommand;
+import com.yeoljeong.tripmate.matching.application.external.MatchingCandidateStore;
 import com.yeoljeong.tripmate.matching.application.external.MatchingNotifier;
 import com.yeoljeong.tripmate.matching.application.usecase.NotifyMatchingCandidatesUsecase;
 import com.yeoljeong.tripmate.matching.domain.model.Matching;
 import com.yeoljeong.tripmate.matching.domain.repository.MatchingRepository;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ public class MatchingNotificationService implements NotifyMatchingCandidatesUsec
 
 	private final MatchingRepository repository;
 	private final MatchingNotifier matchingNotifier;
+	private final MatchingCandidateStore matchingCandidateStore;
 
 	@Override
 	public void sendMatchingInfo(NotifyMatchingCommand command) {
@@ -26,5 +30,14 @@ public class MatchingNotificationService implements NotifyMatchingCandidatesUsec
 			.orElseThrow(() -> new BusinessException(NO_ACTIVE_MATCHING));
 
 		matchingNotifier.publishToUsers(command.userIds(), matching);
+	}
+
+	@Override
+	public void sendMatchingAccomplished(UUID matchingId) {
+		List<UUID> candidates = matchingCandidateStore.getAndDelete(matchingId);
+		if (candidates.isEmpty()) return;
+		candidates.forEach(userId ->
+			matchingNotifier.publishClosedToUser(userId, matchingId)
+		);
 	}
 }
