@@ -4,7 +4,6 @@ import com.yeoljeong.tripmate.event.MatchingCandidatesFoundEvent;
 import com.yeoljeong.tripmate.event.MatchingMatchedEvent;
 import com.yeoljeong.tripmate.event.enums.MatchingTopic;
 import com.yeoljeong.tripmate.exception.BusinessException;
-import com.yeoljeong.tripmate.matching.application.MatchingNotificationService;
 import com.yeoljeong.tripmate.matching.application.dto.command.NotifyMatchingCommand;
 import com.yeoljeong.tripmate.matching.application.external.MatchingCandidateStore;
 import com.yeoljeong.tripmate.matching.application.usecase.NotifyMatchingCandidatesUsecase;
@@ -53,7 +52,7 @@ public class MatchingEventListener {
 	)
 	public void handleMatchingMatched(@Payload MatchingMatchedEvent event, Acknowledgment acknowledgment) {
 		try {
-			notifyMatchingCandidatesUsecase.sendMatchingAccomplished(event.matchingId());
+			notifyMatchingCandidatesUsecase.sendMatchingAccomplished(event.hostUserId());
 			acknowledgment.acknowledge();
 		} catch (Exception e) {
 			log.error("[Matching] matched 처리 실패 - matchingId: {}, error: {}", event.matchingId(), e.getMessage(), e);

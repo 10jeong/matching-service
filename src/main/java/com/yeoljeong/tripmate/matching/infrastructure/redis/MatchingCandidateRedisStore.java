@@ -24,9 +24,9 @@ public class MatchingCandidateRedisStore implements MatchingCandidateStore {
 
 	@Override
 	public void save(UUID hostUserId, List<UUID> candidateIds) {
+		String key = MATCHING_CANDIDATE_KEY_PREFIX + hostUserId;
 		repository.findByHostUserIdAndMatchingStatusOpen(hostUserId)
 			.ifPresent(matching -> {
-				String key = MATCHING_CANDIDATE_KEY_PREFIX + matching.getId();
 				Duration ttl = Duration.between(
 					LocalDateTime.now(),
 					matching.getMatchingPeriod().getRecruitDeadline()
@@ -35,13 +35,14 @@ public class MatchingCandidateRedisStore implements MatchingCandidateStore {
 					redisTemplate.opsForSet().add(key, userId.toString())
 				);
 				redisTemplate.expire(key, ttl);
-				log.debug("[Redis] candidats 저장 - matchingId: {}, 후보수: {}", matching.getId(), candidateIds.size());
+				log.debug("[Redis] candidats 저장 - matchingId: {}, 후보수: {}",
+					matching.getId(), candidateIds.size());
 			});
 	}
 
 	@Override
-	public List<UUID> getAndDelete(UUID matchingId) {
-		String key = MATCHING_CANDIDATE_KEY_PREFIX + matchingId;
+	public List<UUID> getAndDelete(UUID hostUserId) {
+		String key = MATCHING_CANDIDATE_KEY_PREFIX + hostUserId;
 		Set<Object> members = redisTemplate.opsForSet().members(key);
 		redisTemplate.delete(key);
 

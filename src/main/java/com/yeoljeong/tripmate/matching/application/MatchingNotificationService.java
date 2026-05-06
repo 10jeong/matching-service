@@ -33,11 +33,11 @@ public class MatchingNotificationService implements NotifyMatchingCandidatesUsec
 	}
 
 	@Override
-	public void sendMatchingAccomplished(UUID matchingId) {
-		List<UUID> candidates = matchingCandidateStore.getAndDelete(matchingId);
+	public void sendMatchingAccomplished(UUID hostUserId) {
+		List<UUID> candidates = matchingCandidateStore.getAndDelete(hostUserId);
 		if (candidates.isEmpty()) return;
 		candidates.forEach(userId ->
-			matchingNotifier.publishClosedToUser(userId, matchingId)
+			matchingNotifier.publishClosedToUser(userId, hostUserId)
 		);
 	}
 }
