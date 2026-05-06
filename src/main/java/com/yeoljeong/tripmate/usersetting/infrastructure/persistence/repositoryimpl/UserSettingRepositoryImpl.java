@@ -3,6 +3,7 @@ package com.yeoljeong.tripmate.usersetting.infrastructure.persistence.repository
 import com.yeoljeong.tripmate.usersetting.domain.model.UserSetting;
 import com.yeoljeong.tripmate.usersetting.domain.repository.UserSettingRepository;
 import com.yeoljeong.tripmate.usersetting.infrastructure.persistence.jpa.UserSettingJpaRepository;
+import com.yeoljeong.tripmate.usersetting.infrastructure.persistence.querydsl.UserSettingQueryDslRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Repository;
 public class UserSettingRepositoryImpl implements UserSettingRepository {
 
 	private final UserSettingJpaRepository userSettingRepository;
+	private final UserSettingQueryDslRepository userSettingQueryDslRepository;
 
 	@Override
 	public Optional<UserSetting> findByUserIdAndIsDeletedFalse(UUID userId) {
@@ -31,8 +33,11 @@ public class UserSettingRepositoryImpl implements UserSettingRepository {
 	}
 
 	@Override
-	public List<UserSetting> findAllByMatchingEnabledTrueIsDeletedFalse() {
-		return userSettingRepository.findAllByMatchingEnabledTrueAndIsDeletedFalse();
+	public List<UserSetting> findCandidateByCriteria(UUID hostUserId, String gender,
+		boolean allowSmoking, String mbtiIE, String mbtiSN, String mbtiTF, String mbtiPJ) {
+		return userSettingQueryDslRepository.findCandidatesByCriteria(
+			hostUserId, gender, allowSmoking, mbtiIE, mbtiSN, mbtiTF, mbtiPJ
+		);
 	}
 }
 
