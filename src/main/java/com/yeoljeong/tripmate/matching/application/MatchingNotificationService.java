@@ -34,20 +34,20 @@ public class MatchingNotificationService implements NotifyMatchingCandidatesUsec
 	}
 
 	@Override
-	public void sendMatchingAccomplished(UUID hostUserId) {
-		List<UUID> candidates = matchingCandidateStore.get(hostUserId);
+	public void sendMatchingAccomplished(UUID matchingId) {
+		List<UUID> candidates = matchingCandidateStore.get(matchingId);
 		if (candidates.isEmpty()) return;
 		List<UUID> failed = new ArrayList<>();
 		candidates.forEach(userId -> {
 			try {
-				matchingNotifier.publishClosedToUser(userId, hostUserId);
+				matchingNotifier.publishClosedToUser(userId, matchingId);
 			} catch (Exception e) {
 				log.error("[Matching] closed 이벤트 전송 실패 - userId: {}, error: {}", userId, e.getMessage(), e);
 				failed.add(userId);
 			}
 		});
 		if (failed.isEmpty()) {
-			matchingCandidateStore.delete(hostUserId);
+			matchingCandidateStore.delete(matchingId);
 		} else {
 			log.error("[Matching] 일부 candidates 전송 실패 - 실패 수: {}", failed.size());
 		}

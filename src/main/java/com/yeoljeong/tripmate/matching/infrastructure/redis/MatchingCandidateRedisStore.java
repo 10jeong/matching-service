@@ -23,9 +23,9 @@ public class MatchingCandidateRedisStore implements MatchingCandidateStore {
 	private final MatchingRepository repository;
 
 	@Override
-	public void save(UUID hostUserId, List<UUID> candidateIds) {
-		String key = MATCHING_CANDIDATE_KEY_PREFIX + hostUserId;
-		repository.findByHostUserIdAndMatchingStatusOpen(hostUserId)
+	public void save(UUID matchingId, List<UUID> candidateIds) {
+		String key = MATCHING_CANDIDATE_KEY_PREFIX + matchingId;
+		repository.findByHostUserIdAndMatchingStatusOpen(matchingId)
 			.ifPresent(matching -> {
 				Duration ttl = Duration.between(
 					LocalDateTime.now(),
@@ -46,8 +46,8 @@ public class MatchingCandidateRedisStore implements MatchingCandidateStore {
 	}
 
 	@Override
-	public List<UUID> get(UUID hostUserId) {
-		String key = MATCHING_CANDIDATE_KEY_PREFIX + hostUserId;
+	public List<UUID> get(UUID matchingId) {
+		String key = MATCHING_CANDIDATE_KEY_PREFIX + matchingId;
 		Set<Object> members = redisTemplate.opsForSet().members(key);
 		if (members == null) return List.of();
 		return members.stream()
@@ -56,7 +56,7 @@ public class MatchingCandidateRedisStore implements MatchingCandidateStore {
 	}
 
 	@Override
-	public void delete(UUID hostUserId) {
-		redisTemplate.delete(MATCHING_CANDIDATE_KEY_PREFIX + hostUserId);
+	public void delete(UUID matchingId) {
+		redisTemplate.delete(MATCHING_CANDIDATE_KEY_PREFIX + matchingId);
 	}
 }

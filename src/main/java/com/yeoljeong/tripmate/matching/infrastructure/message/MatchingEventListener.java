@@ -29,7 +29,7 @@ public class MatchingEventListener {
 	)
 	public void handleMatchingCandidatesFound(@Payload MatchingCandidatesFoundEvent event, Acknowledgment acknowledgment) {
 		try {
-			matchingCandidateStore.save(event.hostUserId(), event.userIds());
+			matchingCandidateStore.save(event.matchingId(), event.userIds());
 			notifyMatchingCandidatesUsecase.sendMatchingInfo(
 				new NotifyMatchingCommand(event.hostUserId(), event.userIds())
 			);
@@ -52,7 +52,7 @@ public class MatchingEventListener {
 	)
 	public void handleMatchingMatched(@Payload MatchingMatchedEvent event, Acknowledgment acknowledgment) {
 		try {
-			notifyMatchingCandidatesUsecase.sendMatchingAccomplished(event.hostUserId());
+			notifyMatchingCandidatesUsecase.sendMatchingAccomplished(event.matchingId());
 			acknowledgment.acknowledge();
 		} catch (Exception e) {
 			log.error("[Matching] matched 처리 실패 - matchingId: {}, error: {}", event.matchingId(), e.getMessage(), e);
