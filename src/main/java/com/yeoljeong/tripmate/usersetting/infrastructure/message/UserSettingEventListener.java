@@ -62,6 +62,7 @@ public class UserSettingEventListener {
 		try {
 			findEnableMatchingUserUsecase.findAllEnableMatchingUser(
 				new MatchingCandidateCriteria(
+					event.matchingId(),
 					event.hostUserId(),
 					event.allowSmoking(),
 					event.preferenceMbtiIE(),

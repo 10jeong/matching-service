@@ -5,6 +5,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface UserSettingEventPublisher {
-	void publishMatchingCandidates(UUID hostUserId, List<UUID> candidates)
+	void publishMatchingCandidates(UUID matchingId, UUID hostUserId, List<UUID> candidates)
 		throws NoSuchAlgorithmException;
 }
