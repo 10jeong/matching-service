@@ -7,4 +7,5 @@ import java.util.UUID;
 public interface MatchingNotifier {
 	void publishToUsers(List<UUID> userIds, Matching matching);
 	void publishToUserDirect(UUID userId, Matching matching);
+	void publishClosedToUser(UUID userId, UUID matchingId);
 }
