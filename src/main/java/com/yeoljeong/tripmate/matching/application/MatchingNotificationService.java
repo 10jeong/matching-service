@@ -9,6 +9,7 @@ import com.yeoljeong.tripmate.matching.application.external.MatchingNotifier;
 import com.yeoljeong.tripmate.matching.application.usecase.NotifyMatchingCandidatesUsecase;
 import com.yeoljeong.tripmate.matching.domain.model.Matching;
 import com.yeoljeong.tripmate.matching.domain.repository.MatchingRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -34,10 +35,21 @@ public class MatchingNotificationService implements NotifyMatchingCandidatesUsec
 
 	@Override
 	public void sendMatchingAccomplished(UUID hostUserId) {
-		List<UUID> candidates = matchingCandidateStore.getAndDelete(hostUserId);
+		List<UUID> candidates = matchingCandidateStore.get(hostUserId);
 		if (candidates.isEmpty()) return;
-		candidates.forEach(userId ->
-			matchingNotifier.publishClosedToUser(userId, hostUserId)
-		);
+		List<UUID> failed = new ArrayList<>();
+		candidates.forEach(userId -> {
+			try {
+				matchingNotifier.publishClosedToUser(userId, hostUserId);
+			} catch (Exception e) {
+				log.error("[Matching] closed 이벤트 전송 실패 - userId: {}, error: {}", userId, e.getMessage(), e);
+				failed.add(userId);
+			}
+		});
+		if (failed.isEmpty()) {
+			matchingCandidateStore.delete(hostUserId);
+		} else {
+			log.error("[Matching] 일부 candidates 전송 실패 - 실패 수: {}", failed.size());
+		}
 	}
 }

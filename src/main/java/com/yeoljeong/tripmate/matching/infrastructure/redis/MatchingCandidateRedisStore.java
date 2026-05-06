@@ -49,15 +49,17 @@ public class MatchingCandidateRedisStore implements MatchingCandidateStore {
 	}
 
 	@Override
-	public List<UUID> getAndDelete(UUID hostUserId) {
+	public List<UUID> get(UUID hostUserId) {
 		String key = MATCHING_CANDIDATE_KEY_PREFIX + hostUserId;
 		Set<Object> members = redisTemplate.opsForSet().members(key);
-		redisTemplate.delete(key);
-
 		if (members == null) return List.of();
-
 		return members.stream()
 			.map(id -> UUID.fromString(id.toString()))
 			.toList();
+	}
+
+	@Override
+	public void delete(UUID hostUserId) {
+		redisTemplate.delete(MATCHING_CANDIDATE_KEY_PREFIX + hostUserId);
 	}
 }
