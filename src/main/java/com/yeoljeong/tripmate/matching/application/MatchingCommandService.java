@@ -3,14 +3,13 @@ package com.yeoljeong.tripmate.matching.application;
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.matching.application.dto.command.CreateMatchingCommand;
 import com.yeoljeong.tripmate.matching.application.dto.result.MatchingDetailResult;
-import com.yeoljeong.tripmate.matching.application.external.MatchingEventPublisher;
+import com.yeoljeong.tripmate.matching.application.external.MatchingEventPort;
 import com.yeoljeong.tripmate.matching.domain.exception.MatchingErrorCode;
 import com.yeoljeong.tripmate.matching.domain.model.Location;
 import com.yeoljeong.tripmate.matching.domain.model.Matching;
 import com.yeoljeong.tripmate.matching.domain.model.MatchingPeriod;
 import com.yeoljeong.tripmate.matching.domain.model.MatchingSetting;
 import com.yeoljeong.tripmate.matching.domain.repository.MatchingRepository;
-import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,10 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class MatchingCommandService {
 
 	private final MatchingRepository repository;
-	private final MatchingEventPublisher publisher;
+	private final MatchingEventPort matchingEventPort;
 
-	public MatchingDetailResult create(CreateMatchingCommand command)
-		throws NoSuchAlgorithmException {
+	public MatchingDetailResult create(CreateMatchingCommand command) {
 		if (repository.existsByHostUserIdAndMatchingStatusOpen(command.userId())) {
 			throw new BusinessException(MatchingErrorCode.MATCHING_ALREADY_IN_PROGRESS);
 		}
@@ -42,7 +40,7 @@ public class MatchingCommandService {
 			)
 		);
 		Matching saved = repository.save(matching);
-		publisher.publishMatchingCreated(saved);
+		matchingEventPort.appendMatchingCreated(matching);
 		return MatchingDetailResult.from(saved);
 	}
 
@@ -50,6 +48,6 @@ public class MatchingCommandService {
 		Matching matching = repository.findByIdAndIsDeletedFalse(matchingId)
 			.orElseThrow(() -> new BusinessException(MatchingErrorCode.NO_ACTIVE_MATCHING));
 		matching.accept(userId);
-		publisher.publishMatchingAccomplished(matching);
+		matchingEventPort.appendMatchingAccomplished(matching);
 	}
 }
