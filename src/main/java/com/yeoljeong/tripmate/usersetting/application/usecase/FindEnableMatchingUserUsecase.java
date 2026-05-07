@@ -4,6 +4,5 @@ import com.yeoljeong.tripmate.usersetting.application.dto.command.MatchingCandid
 import java.security.NoSuchAlgorithmException;
 
 public interface FindEnableMatchingUserUsecase {
-	void findAllEnableMatchingUser(MatchingCandidateCriteria criteria)
-		throws NoSuchAlgorithmException;
+	void findAllEnableMatchingUser(MatchingCandidateCriteria criteria);
 }
