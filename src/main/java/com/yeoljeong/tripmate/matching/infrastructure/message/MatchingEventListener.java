@@ -1,5 +1,6 @@
 package com.yeoljeong.tripmate.matching.infrastructure.message;
 
+import com.yeoljeong.tripmate.common.infrastructure.KafkaPayloadDeserializer;
 import com.yeoljeong.tripmate.event.MatchingCandidatesFoundEvent;
 import com.yeoljeong.tripmate.event.MatchingMatchedEvent;
 import com.yeoljeong.tripmate.event.enums.MatchingTopic;
@@ -21,13 +22,15 @@ public class MatchingEventListener {
 
 	private final NotifyMatchingCandidatesUsecase notifyMatchingCandidatesUsecase;
 	private final MatchingCandidateStore matchingCandidateStore;
+	private final KafkaPayloadDeserializer deserializer;
 
 	@KafkaListener(
 		topics = MatchingTopic.MATCHING_CANDIDATES_FOUND_TOPIC,
 		groupId = "${spring.kafka.consumer.group-id}",
 		containerFactory = "kafkaListenerContainerFactory"
 	)
-	public void handleMatchingCandidatesFound(@Payload MatchingCandidatesFoundEvent event, Acknowledgment acknowledgment) {
+	public void handleMatchingCandidatesFound(@Payload String payload, Acknowledgment acknowledgment) {
+		MatchingCandidatesFoundEvent event = deserializer.deserialize(payload, MatchingCandidatesFoundEvent.class);
 		try {
 			matchingCandidateStore.save(event.matchingId(), event.userIds());
 			notifyMatchingCandidatesUsecase.sendMatchingInfo(
@@ -35,11 +38,11 @@ public class MatchingEventListener {
 			);
 			acknowledgment.acknowledge();
 		}catch (BusinessException e){
-			log.warn("[Matching] business failure consumed - hostUserId: {}, error: {}",
+			log.warn("[MatchingListener] 처리 중 비즈니스 예외 - hostUserId: {}, error: {}",
 				event.hostUserId(), e.getMessage());
 			acknowledgment.acknowledge();
 		}catch (Exception e) {
-			log.error("[Matching] SSE notify failed - hostUserId: {}, error: {}",
+			log.error("[MatchingListener] 처리 중 예외 - hostUserId: {}, error: {}",
 				event.hostUserId(), e.getMessage());
 			throw e;
 		}
@@ -50,7 +53,8 @@ public class MatchingEventListener {
 		groupId = "${spring.kafka.consumer.group-id}",
 		containerFactory = "kafkaListenerContainerFactory"
 	)
-	public void handleMatchingMatched(@Payload MatchingMatchedEvent event, Acknowledgment acknowledgment) {
+	public void handleMatchingMatched(@Payload String payload, Acknowledgment acknowledgment) {
+		MatchingMatchedEvent event = deserializer.deserialize(payload, MatchingMatchedEvent.class);
 		try {
 			notifyMatchingCandidatesUsecase.sendMatchingAccomplished(event.matchingId());
 			acknowledgment.acknowledge();

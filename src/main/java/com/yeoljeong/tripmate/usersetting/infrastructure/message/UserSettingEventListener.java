@@ -2,6 +2,7 @@ package com.yeoljeong.tripmate.usersetting.infrastructure.message;
 
 import static com.yeoljeong.tripmate.usersetting.domain.exception.UserSettingErrorCode.USER_SETTING_ALREADY_EXISTS;
 
+import com.yeoljeong.tripmate.common.infrastructure.KafkaPayloadDeserializer;
 import com.yeoljeong.tripmate.event.MatchingCreateEvent;
 import com.yeoljeong.tripmate.event.UserCreatedEvent;
 import com.yeoljeong.tripmate.event.enums.MatchingTopic;
@@ -11,7 +12,6 @@ import com.yeoljeong.tripmate.usersetting.application.dto.command.CreateUserSett
 import com.yeoljeong.tripmate.usersetting.application.dto.command.MatchingCandidateCriteria;
 import com.yeoljeong.tripmate.usersetting.application.usecase.CreateUserSettingUsecase;
 import com.yeoljeong.tripmate.usersetting.application.usecase.FindEnableMatchingUserUsecase;
-import java.security.NoSuchAlgorithmException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -26,13 +26,15 @@ public class UserSettingEventListener {
 
 	private final CreateUserSettingUsecase usecase;
 	private final FindEnableMatchingUserUsecase	findEnableMatchingUserUsecase;
+	private final KafkaPayloadDeserializer deserializer;
 
 	@KafkaListener(
 		topics = UserTopic.USER_CREATED_TOPIC,
 		groupId = "matching-usersetting-group",
 		containerFactory = "kafkaListenerContainerFactory"
 	)
-	public void create(@Payload UserCreatedEvent event, Acknowledgment acknowledgment) {
+	public void create(@Payload String payload, Acknowledgment acknowledgment) {
+		UserCreatedEvent event = deserializer.deserialize(payload, UserCreatedEvent.class);
 		try {
 			usecase.create(CreateUserSettingCommand.of(event.userId(), event.gender()));
 			acknowledgment.acknowledge();
@@ -54,11 +56,11 @@ public class UserSettingEventListener {
 
 	@KafkaListener(
 		topics = MatchingTopic.MATCHING_CREATED_TOPIC,
-		groupId = "${spring.kafka.consumer.group-id}",
+		groupId = "matching-usersetting-group",
 		containerFactory = "kafkaListenerContainerFactory"
 	)
-	public void findEnableMatchingUser(@Payload MatchingCreateEvent event, Acknowledgment acknowledgment) {
-		log.info("[Kafka] matching.created 수신 - hostUserId: {}", event.hostUserId());
+	public void findEnableMatchingUser(@Payload String payload, Acknowledgment acknowledgment) {
+		MatchingCreateEvent event = deserializer.deserialize(payload, MatchingCreateEvent.class);
 		try {
 			findEnableMatchingUserUsecase.findAllEnableMatchingUser(
 				new MatchingCandidateCriteria(
@@ -74,13 +76,11 @@ public class UserSettingEventListener {
 			);
 			acknowledgment.acknowledge();
 		} catch (BusinessException e) {
-			log.warn("[UserSetting] matching user finding skipped (business error): userId: {}, error: {}",
-				event.hostUserId(), e.getMessage());
+			log.warn("[USER_SETTING_LISTENER] 매칭 후보 찾기 스킵(비즈니스 에러): matchingId: {}, error: {}",
+				event.matchingId(), e.getMessage());
 			acknowledgment.acknowledge();
-		} catch (NoSuchAlgorithmException ignore) {
-			log.warn("[UserSetting] matching user finding skipped (algorithm error): userId: {}", event.hostUserId());
 		} catch (Exception e) {
-			log.warn("[UserSetting] Retry scheduled for matching user finding (unknown error): userId: {}, error: {}",
+			log.warn("[USER_SETTING_LISTENER] 매칭 후보 찾기 재시도(unknown 에러) : userId: {}, error: {}",
 				event.hostUserId(), e.getMessage());
 			throw e;
 		}
