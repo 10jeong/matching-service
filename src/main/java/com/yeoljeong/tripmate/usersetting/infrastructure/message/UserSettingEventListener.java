@@ -39,13 +39,7 @@ public class UserSettingEventListener {
 			usecase.create(CreateUserSettingCommand.of(event.userId(), event.gender()));
 			acknowledgment.acknowledge();
 		} catch (BusinessException e) {
-			if (USER_SETTING_ALREADY_EXISTS.equals(e.getErrorCode())) {
-				log.warn("[UserSetting] already exists: userId: {}", event.userId());
-			} else {
-				log.error("[UserSetting] create failed (business error): userId: {}, error: {}"
-					, event.userId(), e.getMessage());
-				throw e;
-			}
+			log.warn("[UserSetting] already exists: userId: {}", event.userId());
 			acknowledgment.acknowledge();
 		} catch (Exception e) {
 			log.warn("[UserSetting] Retry scheduled for userSetting creation (unknown error): userId: {}, error: {}",
