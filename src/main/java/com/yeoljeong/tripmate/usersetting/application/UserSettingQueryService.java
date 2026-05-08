@@ -5,7 +5,6 @@ import static com.yeoljeong.tripmate.usersetting.domain.exception.UserSettingErr
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.usersetting.application.dto.command.MatchingCandidateCriteria;
 import com.yeoljeong.tripmate.usersetting.application.dto.result.UserSettingResult;
-import com.yeoljeong.tripmate.usersetting.application.external.UserSettingEventPort;
 import com.yeoljeong.tripmate.usersetting.application.usecase.FindEnableMatchingUserUsecase;
 import com.yeoljeong.tripmate.usersetting.domain.model.UserSetting;
 import com.yeoljeong.tripmate.usersetting.domain.repository.UserSettingRepository;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserSettingQueryService implements FindEnableMatchingUserUsecase {
 
 	private final UserSettingRepository userSettingRepository;
-	private final UserSettingEventPort eventPort;
 
 	public UserSettingResult getOne(UUID userId) {
 		UserSetting setting = userSettingRepository.findByUserIdAndIsDeletedFalse(userId)
@@ -32,13 +30,12 @@ public class UserSettingQueryService implements FindEnableMatchingUserUsecase {
 	}
 
 	@Override
-	public void findAllEnableMatchingUser(MatchingCandidateCriteria criteria) {
-		List<UUID> candidates = userSettingRepository.findCandidateByCriteria(criteria.hostUserId(), criteria.preferenceGender(), criteria.allowSmoking(),
+	public List<UUID> findAllEnableMatchingUser(MatchingCandidateCriteria criteria) {
+		return userSettingRepository.findCandidateByCriteria(criteria.hostUserId(), criteria.preferenceGender(), criteria.allowSmoking(),
 				criteria.preferenceMbtiIE(), criteria.preferenceMbtiSN(), criteria.preferenceMbtiTF(), criteria.preferenceMbtiPJ())
 			.stream()
 			.map(UserSetting::getUserId)
 			.filter(userId -> !userId.equals(criteria.hostUserId()))
 			.toList();
-		eventPort.appendCandidateFound(criteria.matchingId(), criteria.hostUserId(), candidates);
 	}
 }
