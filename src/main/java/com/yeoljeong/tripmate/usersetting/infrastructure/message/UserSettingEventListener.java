@@ -1,7 +1,5 @@
 package com.yeoljeong.tripmate.usersetting.infrastructure.message;
 
-import static com.yeoljeong.tripmate.usersetting.domain.exception.UserSettingErrorCode.USER_SETTING_ALREADY_EXISTS;
-
 import com.yeoljeong.tripmate.common.infrastructure.KafkaPayloadDeserializer;
 import com.yeoljeong.tripmate.event.MatchingCreateEvent;
 import com.yeoljeong.tripmate.event.UserCreatedEvent;
