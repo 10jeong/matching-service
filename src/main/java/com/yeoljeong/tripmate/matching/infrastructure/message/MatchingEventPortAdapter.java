@@ -54,7 +54,7 @@ public class MatchingEventPortAdapter implements MatchingEventPort {
 				matching.getId(), matching.getHostUserId(), matching.getMateUserId(), matching.getTitle()
 			);
 		} catch (NoSuchAlgorithmException e) {
-			log.error("[OUTBOX] matching.matched 이벤트 해시 생성 실패 - matching id: {}", matching.getId());
+			log.error("[OUTBOX] matching.matched 이벤트 해시 생성 실패 - matching id: {}", matching.getId(), e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -72,7 +72,7 @@ public class MatchingEventPortAdapter implements MatchingEventPort {
 				matching.getMatchingSetting().getPreferenceGender().name()
 			);
 		} catch (NoSuchAlgorithmException e) {
-			log.error("[OUTBOX] matching.created 이벤트 해시 생성 실패 - matching id: {}", matching.getId());
+			log.error("[OUTBOX] matching.created 이벤트 해시 생성 실패 - matching id: {}", matching.getId(), e);
 			throw new RuntimeException(e);
 		}
 	}
