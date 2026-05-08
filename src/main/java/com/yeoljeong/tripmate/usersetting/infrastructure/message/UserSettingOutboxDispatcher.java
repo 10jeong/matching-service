@@ -22,7 +22,8 @@ public class UserSettingOutboxDispatcher {
 	@Scheduled(fixedDelay = 5000)
 	@Transactional
 	public void dispatch() {
-		List<UserSettingOutbox> pendingEvents = outboxRepository.findAllByStatus(OutboxStatus.PENDING);
+		List<UserSettingOutbox> pendingEvents = outboxRepository
+			.findTop100ByStatusOrderByCreatedAtAsc(OutboxStatus.PENDING);
 		pendingEvents.forEach(outbox -> {
 			try {
 				kafkaTemplate.send(outbox.getTopic(), outbox.getPayload()).get();

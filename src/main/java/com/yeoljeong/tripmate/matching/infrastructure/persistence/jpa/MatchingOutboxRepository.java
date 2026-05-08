@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MatchingOutboxRepository extends JpaRepository<MatchingOutbox, UUID> {
 
-	List<MatchingOutbox> findAllByStatus(OutboxStatus status);
+	List<MatchingOutbox> findTop100ByStatusOrderByCreatedAtAsc(OutboxStatus status);
 
 }

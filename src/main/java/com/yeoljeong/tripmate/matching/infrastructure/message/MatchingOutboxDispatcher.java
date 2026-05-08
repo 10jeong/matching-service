@@ -22,7 +22,8 @@ public class MatchingOutboxDispatcher {
 	@Scheduled(fixedDelay = 5000)
 	@Transactional
 	public void dispatch() {
-		List<MatchingOutbox> events = matchingOutboxRepository.findAllByStatus(OutboxStatus.PENDING);
+		List<MatchingOutbox> events = matchingOutboxRepository
+			.findTop100ByStatusOrderByCreatedAtAsc(OutboxStatus.PENDING);
 		events.forEach(outbox -> {
 			try {
 				kafkaTemplate.send(outbox.getTopic(), outbox.getPayload()).get(); // 동기 대기

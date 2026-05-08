@@ -7,5 +7,5 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserSettingOutboxRepository extends JpaRepository<UserSettingOutbox, UUID> {
-	List<UserSettingOutbox> findAllByStatus(OutboxStatus status);
+	List<UserSettingOutbox> findTop100ByStatusOrderByCreatedAtAsc(OutboxStatus status);
 }
