@@ -36,7 +36,7 @@ public class UserSettingEventPortAdapter implements UserSettingEventPort {
 				UserSettingOutbox.create(MatchingTopic.MATCHING_CANDIDATES_FOUND_TOPIC, payload));
 		} catch (JsonProcessingException e) {
 			log.error("[Outbox] matching.candidates.found 저장 실패 - matchingId: {}", matchingId, e);
-			throw new RuntimeException();
+			throw new RuntimeException(e);
 		}
 	}
 
