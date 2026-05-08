@@ -16,7 +16,7 @@ public class KafkaPayloadDeserializer {
 		try {
 			return objectMapper.readValue(payload, clazz);
 		} catch (Exception e) {
-			log.error("[KAFKA] 역직렬화 실패 : {}", payload, e);
+			log.error("[KAFKA] 역직렬화 실패 - class {},", clazz, e);
 			throw new RuntimeException(e);
 		}
 	}
