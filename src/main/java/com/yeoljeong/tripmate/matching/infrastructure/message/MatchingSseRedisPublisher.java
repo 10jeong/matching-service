@@ -34,11 +34,11 @@ public class MatchingSseRedisPublisher implements MatchingNotifier {
 	}
 
 	@Override
-	public void publishClosedToUser(UUID userId, UUID hostUserId) {
+	public void publishClosedToUser(UUID userId, UUID matchingId) {
 		String channel = CLOSED_CHANNEL_PREFIX + userId;
 		try {
-			redisTemplate.convertAndSend(channel, new MatchingMatchedPayload(hostUserId));
-			log.debug("[MatchingSSE] 매칭 종료 전송 - userId: {}, hostUserId: {}", userId, hostUserId);
+			redisTemplate.convertAndSend(channel, new MatchingMatchedPayload(matchingId));
+			log.debug("[MatchingSSE] 매칭 종료 전송 - userId: {}, matchingId: {}", userId, matchingId);
 		} catch (Exception e) {
 			log.error("[MatchingSSE] 매칭 종료 전송 실패 - channel: {}, error : {}]", channel, e.getMessage(), e);
 			throw e;

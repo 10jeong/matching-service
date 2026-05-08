@@ -24,11 +24,11 @@ public class KafkaConsumerConfiguration {
 	private int maxAttempts;
 
 	@Bean
-	public ConcurrentKafkaListenerContainerFactory<String, Object> kafkaListenerContainerFactory(
-		ConsumerFactory<String, Object> consumerFactory,
-		KafkaTemplate<String, Object> kafkaTemplate
+	public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory(
+		ConsumerFactory<String, String> consumerFactory,
+		KafkaTemplate<String, String> kafkaTemplate
 	) {
-		ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
+		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(consumerFactory);
 		factory.getContainerProperties().setAckMode(AckMode.MANUAL_IMMEDIATE);
 		DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(

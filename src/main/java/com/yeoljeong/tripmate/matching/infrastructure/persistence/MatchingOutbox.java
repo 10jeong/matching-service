@@ -1,4 +1,4 @@
-package com.yeoljeong.tripmate.matching.domain.model;
+package com.yeoljeong.tripmate.matching.infrastructure.persistence;
 
 import com.yeoljeong.tripmate.domain.Outbox;
 import jakarta.persistence.Entity;
@@ -8,9 +8,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.UUID;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @Table(name = "matching_outbox")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MatchingOutbox extends Outbox {
