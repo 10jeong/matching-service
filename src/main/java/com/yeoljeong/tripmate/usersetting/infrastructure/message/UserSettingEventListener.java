@@ -8,11 +8,8 @@ import com.yeoljeong.tripmate.event.enums.UserTopic;
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.usersetting.application.dto.command.CreateUserSettingCommand;
 import com.yeoljeong.tripmate.usersetting.application.dto.command.MatchingCandidateCriteria;
-import com.yeoljeong.tripmate.usersetting.application.external.UserSettingEventPort;
 import com.yeoljeong.tripmate.usersetting.application.usecase.CreateUserSettingUsecase;
 import com.yeoljeong.tripmate.usersetting.application.usecase.FindEnableMatchingUserUsecase;
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -26,7 +23,6 @@ import org.springframework.stereotype.Component;
 public class UserSettingEventListener {
 
 	private final CreateUserSettingUsecase usecase;
-	private final UserSettingEventPort userSettingEventPort;
 	private final FindEnableMatchingUserUsecase	findEnableMatchingUserUsecase;
 	private final KafkaPayloadDeserializer deserializer;
 
@@ -58,7 +54,7 @@ public class UserSettingEventListener {
 	public void findEnableMatchingUser(@Payload String payload, Acknowledgment acknowledgment) {
 		MatchingCreateEvent event = deserializer.deserialize(payload, MatchingCreateEvent.class);
 		try {
-			List<UUID> candidates = findEnableMatchingUserUsecase.findAllEnableMatchingUser(
+			findEnableMatchingUserUsecase.findAllEnableMatchingUser(
 				new MatchingCandidateCriteria(
 					event.matchingId(),
 					event.hostUserId(),
@@ -70,7 +66,6 @@ public class UserSettingEventListener {
 					event.preferenceGender()
 				)
 			);
-			userSettingEventPort.appendCandidateFound(event.matchingId(), event.hostUserId(), candidates);
 			acknowledgment.acknowledge();
 		} catch (BusinessException e) {
 			log.warn("[USER_SETTING_LISTENER] 매칭 후보 찾기 스킵(비즈니스 에러): matchingId: {}, error: {}",
