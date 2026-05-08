@@ -5,7 +5,6 @@ import static com.yeoljeong.tripmate.usersetting.domain.exception.UserSettingErr
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.usersetting.application.dto.command.MatchingCandidateCriteria;
 import com.yeoljeong.tripmate.usersetting.application.dto.result.UserSettingResult;
-import com.yeoljeong.tripmate.usersetting.application.usecase.FindEnableMatchingUserUsecase;
 import com.yeoljeong.tripmate.usersetting.domain.model.UserSetting;
 import com.yeoljeong.tripmate.usersetting.domain.repository.UserSettingRepository;
 import java.util.List;
@@ -19,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional(readOnly = true)
-public class UserSettingQueryService implements FindEnableMatchingUserUsecase {
+public class UserSettingQueryService {
 
 	private final UserSettingRepository userSettingRepository;
 
@@ -29,7 +28,6 @@ public class UserSettingQueryService implements FindEnableMatchingUserUsecase {
 		return UserSettingResult.from(setting);
 	}
 
-	@Override
 	public List<UUID> findAllEnableMatchingUser(MatchingCandidateCriteria criteria) {
 		return userSettingRepository.findCandidateByCriteria(criteria.hostUserId(), criteria.preferenceGender(), criteria.allowSmoking(),
 				criteria.preferenceMbtiIE(), criteria.preferenceMbtiSN(), criteria.preferenceMbtiTF(), criteria.preferenceMbtiPJ())
