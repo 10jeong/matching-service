@@ -9,7 +9,7 @@ pipeline {
         DOCKER_IMAGE = 'sunsik17/tripmate-matching'
         DOCKER_TAG = 'latest'
         MATCHING_EC2_IP = '172.31.34.59'
-        PEM_PATH = '/home/ec2-user/tripmate.pem'
+        PEM_PATH = '/var/lib/jenkins/tripmate.pem'
     }
 
     stages {
