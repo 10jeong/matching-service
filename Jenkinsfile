@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        jdk 'JDK17'
+    }
+
     environment {
         DOCKER_IMAGE = 'sunsik17/tripmate-matching'
         DOCKER_TAG = 'latest'
