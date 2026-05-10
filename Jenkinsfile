@@ -10,8 +10,6 @@ pipeline {
         DOCKER_TAG = 'latest'
         MATCHING_EC2_IP = '172.31.34.59'
         PEM_PATH = '/home/ec2-user/tripmate.pem'
-        GITHUB_USERNAME = credentials('github-token').username
-        GITHUB_TOKEN = credentials('github-token').password
     }
 
     stages {
@@ -23,8 +21,14 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'chmod +x gradlew'
-                sh './gradlew clean build -x test'
+                withCredentials([usernamePassword(
+                    credentialsId: 'github-token',
+                    usernameVariable: 'GITHUB_USERNAME',
+                    passwordVariable: 'GITHUB_TOKEN'
+                )]) {
+                    sh 'chmod +x gradlew'
+                    sh './gradlew clean build -x test'
+                }
             }
         }
 
