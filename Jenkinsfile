@@ -10,6 +10,8 @@ pipeline {
         DOCKER_TAG = 'latest'
         MATCHING_EC2_IP = '172.31.34.59'
         PEM_PATH = '/home/ec2-user/tripmate.pem'
+        GITHUB_USERNAME = credentials('github-token').username
+        GITHUB_TOKEN = credentials('github-token').password
     }
 
     stages {
