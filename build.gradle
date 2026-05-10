@@ -16,6 +16,15 @@ java {
 
 repositories {
     mavenCentral()
+
+    maven {
+        name = "GithubPackages"
+        url = uri("https://maven.pkg.github.com/10jeong/common-module")
+        credentials {
+            username = System.getenv("GITHUB_USERNAME") ?: findProperty("GITHUB_USERNAME")
+            password = System.getenv("GITHUB_TOKEN") ?: findProperty("GITHUB_TOKEN")
+        }
+    }
 }
 
 ext {
@@ -23,11 +32,26 @@ ext {
 }
 
 dependencies {
+    implementation 'com.yeoljeong:common-module:2.0.2-SNAPSHOT'
+
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'org.postgresql:postgresql'
+
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation 'org.springframework.kafka:spring-kafka'
+
+    implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
+    annotationProcessor 'com.querydsl:querydsl-apt:5.1.0:jakarta'
+    annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+    annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
@@ -40,4 +64,22 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+def generated = 'src/main/generated'
+
+sourceSets {
+    main {
+        java {
+            srcDirs += [generated]
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.getGeneratedSourceOutputDirectory().set(file(generated))
+}
+
+clean {
+    delete file(generated)
 }
