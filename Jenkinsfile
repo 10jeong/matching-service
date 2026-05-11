@@ -67,6 +67,9 @@ pipeline {
     }
 
     post {
+        always {
+            cleanWs()
+        }
         success {
             echo 'Deploy succeeded'
         }
