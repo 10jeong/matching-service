@@ -52,21 +52,25 @@ public class UserSettingQueryDslRepository {
 		BooleanExpression condition = null;
 
 		if (ie != null && !"BOTH".equals(ie) && !"UNKNOWN".equals(ie)) {
-			condition = userSetting.mbti.mbtiIE.eq(MbtiIE.valueOf(ie));
+			condition = userSetting.mbti.mbtiIE.eq(MbtiIE.valueOf(ie))
+				.or(userSetting.mbti.mbtiIE.eq(MbtiIE.UNKNOWN));
 		}
 
 		if (sn != null && !"BOTH".equals(sn) && !"UNKNOWN".equals(sn)) {
-			BooleanExpression snCondition = userSetting.mbti.mbtiSN.eq(MbtiSN.valueOf(sn));
+			BooleanExpression snCondition = userSetting.mbti.mbtiSN.eq(MbtiSN.valueOf(sn))
+				.or(userSetting.mbti.mbtiSN.eq(MbtiSN.UNKNOWN));
 			condition = condition == null ? snCondition : condition.and(snCondition);
 		}
 
 		if (tf != null && !"BOTH".equals(tf) && !"UNKNOWN".equals(tf)) {
-			BooleanExpression tfCondition = userSetting.mbti.mbtiTF.eq(MbtiTF.valueOf(tf));
+			BooleanExpression tfCondition = userSetting.mbti.mbtiTF.eq(MbtiTF.valueOf(tf))
+				.or(userSetting.mbti.mbtiTF.eq(MbtiTF.UNKNOWN));
 			condition = condition == null ? tfCondition : condition.and(tfCondition);
 		}
 
 		if (pj != null && !"BOTH".equals(pj) && !"UNKNOWN".equals(pj)) {
-			BooleanExpression pjCondition = userSetting.mbti.mbtiPJ.eq(MbtiPJ.valueOf(pj));
+			BooleanExpression pjCondition = userSetting.mbti.mbtiPJ.eq(MbtiPJ.valueOf(pj))
+				.or(userSetting.mbti.mbtiPJ.eq(MbtiPJ.UNKNOWN));
 			condition = condition == null ? pjCondition : condition.and(pjCondition);
 		}
 
