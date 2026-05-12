@@ -52,24 +52,4 @@ public class UserSettingController {
 			))
 		);
 	}
-
-	@PatchMapping("/activation")
-	public ResponseEntity<ApiResponse<Void>> activateMatching(
-		@LoginUser UserContext userContext
-	) {
-		userSettingCommandService.activateMatching(userContext.userId());
-		return ResponseEntity.status(EDIT_SUCCESS.getStatus()).body(
-			ApiResponse.success(ACTIVATE_MATCHING, null)
-		);
-	}
-
-	@PatchMapping("/deactivation")
-	public ResponseEntity<ApiResponse<Void>> deactivateMatching(
-		@LoginUser UserContext userContext
-	) {
-		userSettingCommandService.deactivateMatching(userContext.userId());
-		return ResponseEntity.status(EDIT_SUCCESS.getStatus()).body(
-			ApiResponse.success(DEACTIVATE_MATCHING, null)
-		);
-	}
 }
