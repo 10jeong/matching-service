@@ -3,6 +3,7 @@ package com.yeoljeong.tripmate.matching.infrastructure.sse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yeoljeong.tripmate.common.message.MatchingMatchedPayload;
 import com.yeoljeong.tripmate.common.message.MatchingSsePayload;
+import com.yeoljeong.tripmate.matching.application.external.MatchingEventPort;
 import com.yeoljeong.tripmate.matching.application.external.MatchingSseManager;
 import java.io.IOException;
 import java.util.Map;
@@ -33,6 +34,8 @@ public class MatchingRedisSseManager implements MatchingSseManager {
 	private final RedisMessageListenerContainer listenerContainer;
 	private final ObjectMapper objectMapper;
 
+	private final MatchingEventPort eventPort;
+
 	@Override
 	public SseEmitter subscribe(UUID userId) {
 		disconnect(userId);
@@ -43,9 +46,18 @@ public class MatchingRedisSseManager implements MatchingSseManager {
 		registerCloseListener(userId, emitter);
 		sendConnectEvent(userId, emitter);
 
-		emitter.onCompletion(() -> cleanup(userId));
-		emitter.onTimeout(() -> cleanup(userId));
-		emitter.onError(e -> cleanup(userId));
+		emitter.onCompletion(() -> {
+			cleanup(userId);
+			eventPort.appendMateUnsubscribed(userId);
+		});
+		emitter.onTimeout(() -> {
+			cleanup(userId);
+			eventPort.appendMateUnsubscribed(userId);
+		});
+		emitter.onError(e -> {
+			cleanup(userId);
+			eventPort.appendMateUnsubscribed(userId);
+		});
 
 		return emitter;
 	}

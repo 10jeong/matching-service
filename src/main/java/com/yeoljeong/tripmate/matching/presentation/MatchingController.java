@@ -6,7 +6,7 @@ import static com.yeoljeong.tripmate.response.constants.CommonSuccessCode.OK;
 import com.yeoljeong.tripmate.auth.annotation.LoginUser;
 import com.yeoljeong.tripmate.auth.context.UserContext;
 import com.yeoljeong.tripmate.matching.application.MatchingCommandService;
-import com.yeoljeong.tripmate.matching.application.SseSubscriptionService;
+import com.yeoljeong.tripmate.matching.application.usecase.SubscriptionUsecase;
 import com.yeoljeong.tripmate.matching.presentation.dto.request.CreateMatchingRequest;
 import com.yeoljeong.tripmate.matching.presentation.dto.request.UserMatchingCriteriaRequest;
 import com.yeoljeong.tripmate.matching.presentation.dto.response.MatchingDetailResponse;
@@ -32,7 +32,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class MatchingController {
 
 	private final MatchingCommandService commandService;
-	private final SseSubscriptionService subscriptionService;
+	private final SubscriptionUsecase subscriptionUsecase;
 
 	@PostMapping
 	public ResponseEntity<ApiResponse<MatchingDetailResponse>> create(
@@ -51,16 +51,16 @@ public class MatchingController {
 		@LoginUser UserContext userContext,
 		@Valid @ModelAttribute UserMatchingCriteriaRequest request
 	) {
-		return subscriptionService.
-			subscribe(request.toCommand(userContext.userId()));
+		return subscriptionUsecase.
+			execute(request.toCommand(userContext.userId()));
 	}
 
 	@GetMapping(value = "/host/sub", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public SseEmitter subscribe(
 		@LoginUser UserContext userContext
 	) {
-		return subscriptionService.
-			subscribe(userContext.userId());
+		return subscriptionUsecase.
+			execute(userContext.userId());
 	}
 
 	@PatchMapping("/{matchingId}/approval")
