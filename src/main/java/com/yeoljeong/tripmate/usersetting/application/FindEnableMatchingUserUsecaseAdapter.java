@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class FindEnableMatchingUserUsecaseAdapter implements FindEnableMatchingUserUsecase {
 
+	private final UserSettingCommandService userSettingCommandService;
 	private final UserSettingQueryService userSettingQueryService;
 	private final UserSettingEventPort userSettingEventPort;
 
 	@Override
 	public void findAllEnableMatchingUser(MatchingCandidateCriteria criteria) {
+		userSettingCommandService.activateMatching(criteria.hostUserId());
 		List<UUID> candidatesId = userSettingQueryService.findAllEnableMatchingUser(
 			criteria);
 		userSettingEventPort.appendCandidateFound(criteria.matchingId(), criteria.hostUserId(), candidatesId);

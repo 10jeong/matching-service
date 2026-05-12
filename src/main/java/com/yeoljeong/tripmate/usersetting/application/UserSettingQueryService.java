@@ -33,7 +33,6 @@ public class UserSettingQueryService {
 				criteria.preferenceMbtiIE(), criteria.preferenceMbtiSN(), criteria.preferenceMbtiTF(), criteria.preferenceMbtiPJ())
 			.stream()
 			.map(UserSetting::getUserId)
-			.filter(userId -> !userId.equals(criteria.hostUserId()))
 			.toList();
 	}
 }
