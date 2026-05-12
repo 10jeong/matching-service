@@ -8,6 +8,7 @@ import com.yeoljeong.tripmate.usersetting.application.dto.command.CreateUserSett
 import com.yeoljeong.tripmate.usersetting.application.dto.command.UserSettingCommand;
 import com.yeoljeong.tripmate.usersetting.application.dto.result.UserSettingResult;
 import com.yeoljeong.tripmate.usersetting.application.usecase.CreateUserSettingUsecase;
+import com.yeoljeong.tripmate.usersetting.application.usecase.EnabledMatchingSettingUsecase;
 import com.yeoljeong.tripmate.usersetting.domain.model.UserSetting;
 import com.yeoljeong.tripmate.usersetting.domain.repository.UserSettingRepository;
 import java.util.UUID;
@@ -21,7 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
-public class UserSettingCommandService implements CreateUserSettingUsecase {
+public class UserSettingCommandService implements CreateUserSettingUsecase,
+	EnabledMatchingSettingUsecase {
 
 	private final UserSettingRepository userSettingRepository;
 
@@ -47,12 +49,14 @@ public class UserSettingCommandService implements CreateUserSettingUsecase {
 		}
 	}
 
+	@Override
 	public void activateMatching(UUID userId) {
 		UserSetting setting = userSettingRepository.findByUserIdAndIsDeletedFalse(userId)
 			.orElseThrow(() -> new BusinessException(NOT_FOUND_USER_SETTING));
 		setting.activateMatching();
 	}
 
+	@Override
 	public void deactivateMatching(UUID userId) {
 		UserSetting setting = userSettingRepository.findByUserIdAndIsDeletedFalse(userId)
 			.orElseThrow(() -> new BusinessException(NOT_FOUND_USER_SETTING));
