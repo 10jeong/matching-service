@@ -3,6 +3,7 @@ package com.yeoljeong.tripmate.usersetting.infrastructure.message;
 import com.yeoljeong.tripmate.common.infrastructure.KafkaPayloadDeserializer;
 import com.yeoljeong.tripmate.common.message.MateConnectEvent;
 import com.yeoljeong.tripmate.event.MatchingCreateEvent;
+import com.yeoljeong.tripmate.event.MatchingMatchedEvent;
 import com.yeoljeong.tripmate.event.UserCreatedEvent;
 import com.yeoljeong.tripmate.event.enums.MatchingTopic;
 import com.yeoljeong.tripmate.event.enums.UserTopic;
@@ -119,6 +120,28 @@ public class UserSettingEventListener {
 		} catch (Exception e) {
 			log.warn("[USER_SETTING_LISTENER] 메이트 매칭 가능 상태 false 재시도(unknown 에러): userId = {}, error = {}",
 				event.userId(), e.getMessage(), e);
+			throw e;
+		}
+	}
+
+	@KafkaListener(
+		topics = MatchingTopic.MATCHING_MATCHED_TOPIC,
+		groupId = "matching-usersetting-group",
+		containerFactory = "kafkaListenerContainerFactory"
+	)
+	public void matchingMatched(@Payload String payload, Acknowledgment acknowledgment) {
+		MatchingMatchedEvent event = deserializer.deserialize(payload, MatchingMatchedEvent.class);
+		try {
+			enabledMatchingSettingUsecase.deactivateMatching(event.hostUserId());
+			enabledMatchingSettingUsecase.deactivateMatching(event.mateUserId());
+			acknowledgment.acknowledge();
+		} catch (BusinessException e) {
+			log.warn("[USER_SETTING_LISTENER] 매칭 완료 후 매칭 가능 상태 false 변경 실패(비즈니스 에러): matchingId = {}, error = {}",
+				event.matchingId(), e.getMessage(), e);
+			acknowledgment.acknowledge();
+		} catch (Exception e) {
+			log.warn("[USER_SETTING_LISTENER] 매칭 완료 후 매칭 가능 상태 false 재시도(unknown 에러): matchingId = {}, error = {}",
+				event.matchingId(), e.getMessage(), e);
 			throw e;
 		}
 	}
