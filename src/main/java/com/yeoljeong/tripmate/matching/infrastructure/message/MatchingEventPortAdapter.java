@@ -2,6 +2,9 @@ package com.yeoljeong.tripmate.matching.infrastructure.message;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yeoljeong.tripmate.common.message.MateConnectEvent;
+import com.yeoljeong.tripmate.common.message.MateConnectEvent.Subscribe;
+import com.yeoljeong.tripmate.common.message.MateConnectEvent.Unsubscribe;
 import com.yeoljeong.tripmate.event.EventUtils;
 import com.yeoljeong.tripmate.event.MatchingCreateEvent;
 import com.yeoljeong.tripmate.event.MatchingMatchedEvent;
@@ -11,13 +14,16 @@ import com.yeoljeong.tripmate.matching.domain.model.Matching;
 import com.yeoljeong.tripmate.matching.infrastructure.persistence.MatchingOutbox;
 import com.yeoljeong.tripmate.matching.infrastructure.persistence.jpa.MatchingOutboxRepository;
 import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class MatchingEventPortAdapter implements MatchingEventPort {
 
 	private final ObjectMapper objectMapper;
@@ -43,6 +49,36 @@ public class MatchingEventPortAdapter implements MatchingEventPort {
 			matchingOutboxRepository.save(MatchingOutbox.create(MatchingTopic.MATCHING_MATCHED_TOPIC, payload));
 		} catch (JsonProcessingException e) {
 			log.error("[OUTBOX] matching.matched 저장 실패 : matchingId = {}", matching.getId(), e);
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public void appendMateSubscribed(UUID userId) {
+		try {
+			MateConnectEvent.Subscribe event = new Subscribe(userId);
+			String payload = objectMapper.writeValueAsString(event);
+			matchingOutboxRepository.save(MatchingOutbox.create(
+				//TODO mate.subscribe MatchingTopic에 추가
+				"mate.subscribed",
+				payload));
+		} catch (JsonProcessingException e) {
+			log.error("[OUTBOX] mate.subscribe 저장 실패 : userId = {}", userId, e);
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public void appendMateUnsubscribed(UUID userId) {
+		try {
+			MateConnectEvent.Unsubscribe event = new Unsubscribe(userId);
+			String payload = objectMapper.writeValueAsString(event);
+			matchingOutboxRepository.save(MatchingOutbox.create(
+				//TODO mate.unsubscribe MatchingTopic에 추가
+				"mate.unsubscribed",
+				payload));
+		} catch (JsonProcessingException e) {
+			log.error("[OUTBOX] mate.unsubscribe 저장 실패 : userId = {}", userId, e);
 			throw new RuntimeException(e);
 		}
 	}
