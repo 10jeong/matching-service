@@ -83,7 +83,7 @@ public class UserSettingEventListener {
 	}
 
 	@KafkaListener(
-		topics = "mate.subscribed",
+		topics = MatchingTopic.MATCHING_MATE_SUBSCRIBED_TOPIC,
 		groupId = "matching-usersetting-group",
 		containerFactory = "kafkaListenerContainerFactory"
 	)
@@ -104,7 +104,7 @@ public class UserSettingEventListener {
 	}
 
 	@KafkaListener(
-		topics = "mate.unsubscribed",
+		topics = MatchingTopic.MATCHING_MATE_UNSUBSCRIBED_TOPIC,
 		groupId = "matching-usersetting-group",
 		containerFactory = "kafkaListenerContainerFactory"
 	)
