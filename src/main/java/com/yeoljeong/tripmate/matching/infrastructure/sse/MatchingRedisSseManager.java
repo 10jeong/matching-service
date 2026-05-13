@@ -65,6 +65,7 @@ public class MatchingRedisSseManager implements MatchingSseManager {
 	@Override
 	public void disconnect(UUID userId) {
 		cleanup(userId);
+		eventPort.appendMateUnsubscribed(userId);
 	}
 
 	private void registerMatchingListener(UUID userId, SseEmitter emitter) {
