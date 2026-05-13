@@ -24,6 +24,11 @@ public class MatchingRepositoryImpl implements MatchingRepository {
 	}
 
 	@Override
+	public boolean existsByHostUserIdAndMatchingStatusMatched(UUID hostId) {
+		return repository.existsByHostUserIdAndStatus(hostId, MatchingStatus.MATCHED);
+	}
+
+	@Override
 	public Optional<Matching> findByHostUserIdAndMatchingStatusOpen(UUID hostId) {
 		return repository.findByHostUserIdAndStatus(hostId, MatchingStatus.OPEN);
 	}
@@ -45,5 +50,10 @@ public class MatchingRepositoryImpl implements MatchingRepository {
 	@Override
 	public Optional<Matching> findByIdAndIsDeletedFalse(UUID matchingId) {
 		return repository.findByIdAndIsDeletedFalse(matchingId);
+	}
+
+	@Override
+	public boolean existsByMateUserIdAndMatchingStatusMatched(UUID mateId) {
+		return repository.existsByMateUserIdAndStatus(mateId, MatchingStatus.MATCHED);
 	}
 }

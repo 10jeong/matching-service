@@ -7,9 +7,11 @@ import java.util.UUID;
 
 public interface MatchingRepository {
 	boolean existsByHostUserIdAndMatchingStatusOpen(UUID hostId);
+	boolean existsByHostUserIdAndMatchingStatusMatched(UUID hostId);
 	Optional<Matching> findByHostUserIdAndMatchingStatusOpen(UUID hostId);
 	Matching save(Matching matching);
 	List<Matching> findAllByCriteria(UUID userId, String gender, boolean isSmoking,
 		String mbtiIE, String mbtiSN, String mbtiTF, String mbtiPJ);
 	Optional<Matching> findByIdAndIsDeletedFalse(UUID matchingId);
+	boolean existsByMateUserIdAndMatchingStatusMatched(UUID mateId);
 }

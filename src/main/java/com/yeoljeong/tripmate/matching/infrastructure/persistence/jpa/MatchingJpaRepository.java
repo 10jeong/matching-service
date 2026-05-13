@@ -10,4 +10,5 @@ public interface MatchingJpaRepository extends JpaRepository<Matching, UUID> {
 	boolean existsByHostUserIdAndStatus(UUID hostId, MatchingStatus status);
 	Optional<Matching> findByHostUserIdAndStatus(UUID hostId, MatchingStatus status);
 	Optional<Matching> findByIdAndIsDeletedFalse(UUID matchingId);
+	boolean existsByMateUserIdAndStatus(UUID mateId, MatchingStatus status);
 }
