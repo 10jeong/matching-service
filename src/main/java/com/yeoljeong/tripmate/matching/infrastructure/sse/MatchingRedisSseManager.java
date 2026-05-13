@@ -47,14 +47,17 @@ public class MatchingRedisSseManager implements MatchingSseManager {
 		sendConnectEvent(userId, emitter);
 
 		emitter.onCompletion(() -> {
+			log.info("[SSE] onCompletion 호출 - userId: {}", userId);
 			cleanup(userId);
 			eventPort.appendMateUnsubscribed(userId);
 		});
 		emitter.onTimeout(() -> {
+			log.info("[SSE] onTimeout 호출 - userId: {}", userId);
 			cleanup(userId);
 			eventPort.appendMateUnsubscribed(userId);
 		});
 		emitter.onError(e -> {
+			log.info("[SSE] onError 호출 - userId: {}", userId);
 			cleanup(userId);
 			eventPort.appendMateUnsubscribed(userId);
 		});
