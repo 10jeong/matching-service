@@ -52,7 +52,7 @@ public class UserSettingQueryDslRepository {
 		BooleanExpression condition = null;
 
 		if (ie != null && !"BOTH".equals(ie) && !"UNKNOWN".equals(ie)) {
-			condition = userSetting.mbti.mbtiIE.eq(MbtiIE.valueOf(ie)); // UNKNOWN 제거
+			condition = userSetting.mbti.mbtiIE.eq(MbtiIE.valueOf(ie));
 		}
 
 		if (sn != null && !"BOTH".equals(sn) && !"UNKNOWN".equals(sn)) {
