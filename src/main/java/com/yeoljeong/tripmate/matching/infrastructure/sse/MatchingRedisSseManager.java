@@ -64,15 +64,14 @@ public class MatchingRedisSseManager implements MatchingSseManager {
 
 	@Override
 	public void disconnect(UUID userId) {
-		cleanup(userId);
-		eventPort.appendMateUnsubscribed(userId);
+		cleanupSilently(userId);
 	}
 
 	private void registerMatchingListener(UUID userId, SseEmitter emitter) {
 		ChannelTopic topic = new ChannelTopic(CHANNEL_PREFIX + userId);
 		MessageListener listener = (message, pattern) -> {
 			try {
-				log.info("[SSE] Redis 메시지 수신 - userId: {}", userId); // 추가
+				log.info("[SSE] Redis 메시지 수신 - userId: {}", userId);
 				MatchingSsePayload payload = objectMapper.readValue(
 					message.getBody(), MatchingSsePayload.class
 				);
@@ -120,6 +119,21 @@ public class MatchingRedisSseManager implements MatchingSseManager {
 		if (emitter != null) {
 			emitter.complete();
 		}
+		removeListeners(userId);
+	}
+
+	private void cleanupSilently(UUID userId) {
+		SseEmitter emitter = emitters.remove(userId);
+		if (emitter != null) {
+			emitter.onCompletion(() -> {});
+			emitter.onTimeout(() -> {});
+			emitter.onError(e -> {});
+			emitter.complete();
+		}
+		removeListeners(userId);
+	}
+
+	private void removeListeners(UUID userId) {
 		MessageListener listener = listeners.remove(userId);
 		if (listener != null) {
 			listenerContainer.removeMessageListener(
