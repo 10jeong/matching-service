@@ -54,12 +54,10 @@ public class MatchingRedisSseManager implements MatchingSseManager {
 		emitter.onTimeout(() -> {
 			log.info("[SSE] onTimeout 호출 - userId: {}", userId);
 			cleanup(userId);
-			eventPort.appendMateUnsubscribed(userId);
 		});
 		emitter.onError(e -> {
 			log.info("[SSE] onError 호출 - userId: {}", userId);
 			cleanup(userId);
-			eventPort.appendMateUnsubscribed(userId);
 		});
 
 		return emitter;
