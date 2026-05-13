@@ -59,9 +59,7 @@ public class MatchingEventPortAdapter implements MatchingEventPort {
 			MateConnectEvent.Subscribe event = new Subscribe(userId);
 			String payload = objectMapper.writeValueAsString(event);
 			matchingOutboxRepository.save(MatchingOutbox.create(
-				//TODO mate.subscribe MatchingTopic에 추가
-				"mate.subscribed",
-				payload));
+				MatchingTopic.MATCHING_MATE_SUBSCRIBED_TOPIC, payload));
 		} catch (JsonProcessingException e) {
 			log.error("[OUTBOX] mate.subscribe 저장 실패 : userId = {}", userId, e);
 			throw new RuntimeException(e);
@@ -74,9 +72,7 @@ public class MatchingEventPortAdapter implements MatchingEventPort {
 			MateConnectEvent.Unsubscribe event = new Unsubscribe(userId);
 			String payload = objectMapper.writeValueAsString(event);
 			matchingOutboxRepository.save(MatchingOutbox.create(
-				//TODO mate.unsubscribe MatchingTopic에 추가
-				"mate.unsubscribed",
-				payload));
+				MatchingTopic.MATCHING_MATE_UNSUBSCRIBED_TOPIC, payload));
 		} catch (JsonProcessingException e) {
 			log.error("[OUTBOX] mate.unsubscribe 저장 실패 : userId = {}", userId, e);
 			throw new RuntimeException(e);
