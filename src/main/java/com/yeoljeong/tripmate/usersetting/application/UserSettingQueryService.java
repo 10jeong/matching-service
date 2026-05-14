@@ -8,6 +8,7 @@ import com.yeoljeong.tripmate.usersetting.application.dto.result.UserSettingResu
 import com.yeoljeong.tripmate.usersetting.domain.model.UserSetting;
 import com.yeoljeong.tripmate.usersetting.domain.repository.UserSettingRepository;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +29,15 @@ public class UserSettingQueryService {
 		return UserSettingResult.from(setting);
 	}
 
-	public List<UUID> findAllEnableMatchingUser(MatchingCandidateCriteria criteria) {
-		return userSettingRepository.findCandidateByCriteria(criteria.hostUserId(), criteria.preferenceGender(), criteria.allowSmoking(),
-				criteria.preferenceMbtiIE(), criteria.preferenceMbtiSN(), criteria.preferenceMbtiTF(), criteria.preferenceMbtiPJ())
+	public List<UUID> findAllEnableMatchingUser(MatchingCandidateCriteria criteria,
+		Set<UUID> nearbyUsers) {
+		return userSettingRepository.findCandidateByCriteria(
+				criteria.hostUserId(), criteria.preferenceGender(), criteria.allowSmoking(),
+				criteria.preferenceMbtiIE(),
+				criteria.preferenceMbtiSN(),
+				criteria.preferenceMbtiTF(),
+				criteria.preferenceMbtiPJ(),
+				nearbyUsers)
 			.stream()
 			.map(UserSetting::getUserId)
 			.toList();
