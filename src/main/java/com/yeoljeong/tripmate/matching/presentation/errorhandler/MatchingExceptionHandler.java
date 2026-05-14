@@ -1,6 +1,8 @@
 package com.yeoljeong.tripmate.matching.presentation.errorhandler;
 
+import com.yeoljeong.tripmate.exception.constants.CommonErrorCode;
 import com.yeoljeong.tripmate.matching.presentation.MatchingController;
+import com.yeoljeong.tripmate.response.ApiResponse;
 import java.util.stream.Collectors;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +15,14 @@ import org.springframework.web.context.request.async.AsyncRequestTimeoutExceptio
 public class MatchingExceptionHandler {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<String> handleValidation(MethodArgumentNotValidException e) {
+	public ResponseEntity<ApiResponse<String>> handleValidation(MethodArgumentNotValidException e) {
 		String message = e.getBindingResult().getFieldErrors().stream()
 			.map(fe -> fe.getField() + ": " + fe.getDefaultMessage())
 			.collect(Collectors.joining(", "));
 		return ResponseEntity
 			.badRequest()
 			.contentType(MediaType.TEXT_PLAIN)
-			.body(message);
+			.body(ApiResponse.error(CommonErrorCode.INVALID_INPUT, message));
 	}
 
 	@ExceptionHandler(AsyncRequestTimeoutException.class)
