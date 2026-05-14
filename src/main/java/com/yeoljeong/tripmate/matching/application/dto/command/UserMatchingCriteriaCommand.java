@@ -6,6 +6,8 @@ public record UserMatchingCriteriaCommand(
 	UUID userId,
 	String gender,
 	boolean smoking,
+	Double latitude,
+	Double longitude,
 	String mbtiIE,
 	String mbtiSN,
 	String mbtiTF,

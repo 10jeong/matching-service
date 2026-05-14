@@ -5,6 +5,7 @@ import com.yeoljeong.tripmate.common.message.MatchingMatchedPayload;
 import com.yeoljeong.tripmate.common.message.MatchingSsePayload;
 import com.yeoljeong.tripmate.matching.application.external.MatchingEventPort;
 import com.yeoljeong.tripmate.matching.application.external.MatchingSseManager;
+import com.yeoljeong.tripmate.matching.application.external.UserGeoStore;
 import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
@@ -34,6 +35,7 @@ public class MatchingRedisSseManager implements MatchingSseManager {
 	private final RedisMessageListenerContainer listenerContainer;
 	private final ObjectMapper objectMapper;
 
+	private final UserGeoStore userGeoStore;
 	private final MatchingEventPort eventPort;
 
 	@Override
@@ -50,6 +52,7 @@ public class MatchingRedisSseManager implements MatchingSseManager {
 			log.info("[SSE] onCompletion 호출 - userId: {}", userId);
 			cleanup(userId);
 			eventPort.appendMateUnsubscribed(userId);
+			userGeoStore.removeUserLocation(userId);
 		});
 		emitter.onTimeout(() -> {
 			log.info("[SSE] onTimeout 호출 - userId: {}", userId);

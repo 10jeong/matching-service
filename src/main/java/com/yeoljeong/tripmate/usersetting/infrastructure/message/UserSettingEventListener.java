@@ -62,6 +62,8 @@ public class UserSettingEventListener {
 				new MatchingCandidateCriteria(
 					event.matchingId(),
 					event.hostUserId(),
+					event.latitude(),
+					event.longitude(),
 					event.allowSmoking(),
 					event.preferenceMbtiIE(),
 					event.preferenceMbtiSN(),
