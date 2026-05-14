@@ -40,7 +40,8 @@ public class MatchingNotificationService implements NotifyMatchingCandidatesUsec
 		List<UUID> failed = new ArrayList<>();
 		candidates.forEach(userId -> {
 			try {
-				matchingNotifier.publishClosedToUser(userId, matchingId);
+				Matching matching = getMatching(matchingId);
+				matchingNotifier.publishClosedToUser(userId, matching);
 			} catch (Exception e) {
 				log.error("[Matching] closed 이벤트 전송 실패 - userId: {}, error: {}", userId, e.getMessage(), e);
 				failed.add(userId);
@@ -51,5 +52,10 @@ public class MatchingNotificationService implements NotifyMatchingCandidatesUsec
 		} else {
 			log.error("[Matching] 일부 candidates 전송 실패 - 실패 수: {}", failed.size());
 		}
+	}
+
+	private Matching getMatching(UUID matchingId) {
+		return repository.findByIdAndIsDeletedFalse(matchingId)
+			.orElseThrow(() -> new BusinessException(NO_ACTIVE_MATCHING));
 	}
 }

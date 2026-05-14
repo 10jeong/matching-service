@@ -107,6 +107,7 @@ public class MatchingRedisSseManager implements MatchingSseManager {
 						.name("matching-closed")
 						.data(payload)
 				);
+				emitter.complete();
 			} catch (IOException e) {
 				log.error("[MatchingSSE] closed 이벤트 전송 실패 - userId: {}", userId);
 				cleanup(userId);
