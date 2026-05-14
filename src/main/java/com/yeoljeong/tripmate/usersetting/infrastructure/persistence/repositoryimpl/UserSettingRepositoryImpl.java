@@ -6,6 +6,7 @@ import com.yeoljeong.tripmate.usersetting.infrastructure.persistence.jpa.UserSet
 import com.yeoljeong.tripmate.usersetting.infrastructure.persistence.querydsl.UserSettingQueryDslRepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -34,9 +35,9 @@ public class UserSettingRepositoryImpl implements UserSettingRepository {
 
 	@Override
 	public List<UserSetting> findCandidateByCriteria(UUID hostUserId, String gender,
-		boolean allowSmoking, String mbtiIE, String mbtiSN, String mbtiTF, String mbtiPJ) {
+		boolean allowSmoking, String mbtiIE, String mbtiSN, String mbtiTF, String mbtiPJ, Set<UUID> nearbyUsers) {
 		return userSettingQueryDslRepository.findCandidatesByCriteria(
-			hostUserId, gender, allowSmoking, mbtiIE, mbtiSN, mbtiTF, mbtiPJ
+			hostUserId, gender, allowSmoking, mbtiIE, mbtiSN, mbtiTF, mbtiPJ, nearbyUsers
 		);
 	}
 }

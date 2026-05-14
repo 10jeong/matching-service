@@ -11,6 +11,7 @@ import com.yeoljeong.tripmate.usersetting.domain.model.constants.MbtiPJ;
 import com.yeoljeong.tripmate.usersetting.domain.model.constants.MbtiSN;
 import com.yeoljeong.tripmate.usersetting.domain.model.constants.MbtiTF;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -23,13 +24,14 @@ public class UserSettingQueryDslRepository {
 	private final QUserSetting userSetting = QUserSetting.userSetting;
 
 	public List<UserSetting> findCandidatesByCriteria(UUID hostUserId, String preferenceGender, boolean allowSmoking,
-		String preferenceMbtiIE, String preferenceMbtiSN, String preferenceMbtiTF, String preferenceMbtiPJ
+		String preferenceMbtiIE, String preferenceMbtiSN, String preferenceMbtiTF, String preferenceMbtiPJ, Set<UUID> nearbyUsers
 	) {
 		return jpaQueryFactory.selectFrom(userSetting)
 			.where(
 				userSetting.matchingEnabled.isTrue(),
 				userSetting.isDeleted.isFalse(),
 				userSetting.userId.ne(hostUserId),
+				userSetting.userId.in(nearbyUsers),
 				smokingCondition(allowSmoking),
 				genderCondition(preferenceGender),
 				mbtiCondition(
