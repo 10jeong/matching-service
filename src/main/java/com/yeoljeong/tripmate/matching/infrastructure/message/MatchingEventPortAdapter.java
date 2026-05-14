@@ -96,6 +96,7 @@ public class MatchingEventPortAdapter implements MatchingEventPort {
 			return new MatchingCreateEvent(
 				EventUtils.getEventHash("matching", matching.getId().toString(), matching.getUpdatedAt()),
 				matching.getId(), matching.getHostUserId(), matching.getTitle(),
+				matching.getLocation().getLat().doubleValue() ,matching.getLocation().getLng().doubleValue(),
 				matching.getMatchingSetting().isAllowSmoking(),
 				matching.getMatchingSetting().getPreferenceMbtiIE().name(),
 				matching.getMatchingSetting().getPreferenceMbtiSN().name(),
