@@ -10,13 +10,12 @@ import com.yeoljeong.tripmate.matching.domain.repository.MatchingRepository;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Service
-@RequiredArgsConstructor
 public class SseSubscriptionService {
 
 	private final MatchingSseManager sseManager;
@@ -24,6 +23,21 @@ public class SseSubscriptionService {
 	private final MatchingNotifier candidateNotifier;
 	private final UserSettingPort userSettingPort;
 	private final NearbyUserFiltering nearbyUserFiltering;
+
+	public SseSubscriptionService(
+		MatchingSseManager sseManager,
+		MatchingRepository repository,
+		MatchingNotifier candidateNotifier,
+		UserSettingPort userSettingPort,
+		@Qualifier("matchingNearbyFiltering") NearbyUserFiltering nearbyUserFiltering
+	) {
+		this.sseManager = sseManager;
+		this.repository = repository;
+		this.candidateNotifier = candidateNotifier;
+		this.userSettingPort = userSettingPort;
+		this.nearbyUserFiltering = nearbyUserFiltering;
+	}
+
 
 	@Transactional(readOnly = true)
 	public SseEmitter subscribe(UserMatchingCriteriaCommand command) {
