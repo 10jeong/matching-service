@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class FindEnableMatchingUserUsecaseAdapter implements FindEnableMatchingUserUsecase {
 
 	private final UserSettingCommandService userSettingCommandService;
@@ -30,6 +32,7 @@ public class FindEnableMatchingUserUsecaseAdapter implements FindEnableMatchingU
 		}
 		List<UUID> candidatesId = userSettingQueryService.findAllEnableMatchingUser(
 			criteria, nearbyUsers);
+		log.info("[UserSetting] 후보군 수: {}", candidatesId.size());
 		userSettingEventPort.appendCandidateFound(criteria.matchingId(), criteria.hostUserId(), candidatesId);
 	}
 }
