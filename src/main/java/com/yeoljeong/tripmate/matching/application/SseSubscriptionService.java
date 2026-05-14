@@ -10,12 +10,14 @@ import com.yeoljeong.tripmate.matching.domain.repository.MatchingRepository;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Service
+@Slf4j
 public class SseSubscriptionService {
 
 	private final MatchingSseManager sseManager;
@@ -46,6 +48,7 @@ public class SseSubscriptionService {
 		Set<UUID> nearbyUsers = nearbyUserFiltering.findNearbyUsers(
 			command.latitude(), command.longitude(), 1.0
 		);
+		log.info("[SSE] 반경 내 유저: {}", nearbyUsers);
 		List<Matching> openMatchings = repository.findAllByCriteria(
 			setting.userId(),
 			setting.gender(),
@@ -55,9 +58,14 @@ public class SseSubscriptionService {
 			setting.mbtiTF(),
 			setting.mbtiPJ()
 		);
+		log.info("[SSE] OPEN 매칭방: {}", openMatchings.size());
 
 		openMatchings.stream()
-			.filter(matching -> nearbyUsers.contains(matching.getHostUserId()))
+			.filter(matching -> {
+				boolean contains = nearbyUsers.contains(matching.getHostUserId());
+				log.info("[SSE] hostUserId: {}, nearbyUsers에 포함: {}", matching.getHostUserId(), contains);
+				return contains;
+			})
 			.forEach(matching -> candidateNotifier.publishToUserDirect(command.userId(), matching));
 		return emitter;
 	}
