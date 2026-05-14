@@ -15,7 +15,7 @@ import org.springframework.data.redis.connection.RedisGeoCommands.GeoLocation;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("matchingNearbyFiltering")
 @RequiredArgsConstructor
 @Slf4j
 public class RedisNearbyFiltering implements NearbyUserFiltering {
