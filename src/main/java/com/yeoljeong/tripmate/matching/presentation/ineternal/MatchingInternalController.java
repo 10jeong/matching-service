@@ -1,6 +1,6 @@
 package com.yeoljeong.tripmate.matching.presentation.ineternal;
 
-import com.yeoljeong.tripmate.matching.application.usecase.MatchingQueryService;
+import com.yeoljeong.tripmate.matching.application.MatchingQueryService;
 import jakarta.ws.rs.PathParam;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
