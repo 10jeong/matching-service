@@ -4,13 +4,7 @@ import java.util.UUID;
 
 public record UserMatchingCriteriaCommand(
 	UUID userId,
-	String gender,
-	boolean smoking,
 	Double latitude,
-	Double longitude,
-	String mbtiIE,
-	String mbtiSN,
-	String mbtiTF,
-	String mbtiPJ
+	Double longitude
 ) {
 }
