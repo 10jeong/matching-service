@@ -5,7 +5,8 @@ import static com.yeoljeong.tripmate.response.constants.CommonSuccessCode.OK;
 
 import com.yeoljeong.tripmate.auth.annotation.LoginUser;
 import com.yeoljeong.tripmate.auth.context.UserContext;
-import com.yeoljeong.tripmate.matching.application.MatchingCommandService;
+import com.yeoljeong.tripmate.matching.application.usecase.MatchingAcceptUsecase;
+import com.yeoljeong.tripmate.matching.application.usecase.MatchingCreateUsecase;
 import com.yeoljeong.tripmate.matching.application.usecase.SubscriptionUsecase;
 import com.yeoljeong.tripmate.matching.presentation.dto.request.CreateMatchingRequest;
 import com.yeoljeong.tripmate.matching.presentation.dto.request.UserMatchingCriteriaRequest;
@@ -31,7 +32,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @RequestMapping("/matching")
 public class MatchingController {
 
-	private final MatchingCommandService commandService;
+	private final MatchingAcceptUsecase acceptUsecase;
+	private final MatchingCreateUsecase createUsecase;
 	private final SubscriptionUsecase subscriptionUsecase;
 
 	@PostMapping
@@ -41,7 +43,7 @@ public class MatchingController {
 	){
 		return ResponseEntity.status(CREATE.getStatus()).body(
 			ApiResponse.success(CREATE, MatchingDetailResponse.from(
-				commandService.create(request.toCommand(userContext.userId()))
+				createUsecase.create(request.toCommand(userContext.userId()))
 			))
 		);
 	}
@@ -68,7 +70,7 @@ public class MatchingController {
 		@LoginUser UserContext userContext,
 		@PathVariable UUID matchingId
 	) {
-		commandService.accept(userContext.userId(), matchingId);
+		acceptUsecase.accept(userContext.userId(), matchingId);
 		return ResponseEntity.ok(ApiResponse.success(OK, null));
 	}
 }

@@ -1,4 +1,4 @@
-package com.yeoljeong.tripmate.matching.application.usecase;
+package com.yeoljeong.tripmate.matching.application;
 
 import com.yeoljeong.tripmate.matching.domain.repository.MatchingRepository;
 import java.util.UUID;

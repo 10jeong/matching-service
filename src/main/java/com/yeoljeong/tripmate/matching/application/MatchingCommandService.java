@@ -2,8 +2,6 @@ package com.yeoljeong.tripmate.matching.application;
 
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.matching.application.dto.command.CreateMatchingCommand;
-import com.yeoljeong.tripmate.matching.application.dto.result.MatchingDetailResult;
-import com.yeoljeong.tripmate.matching.application.external.MatchingEventPort;
 import com.yeoljeong.tripmate.matching.domain.exception.MatchingErrorCode;
 import com.yeoljeong.tripmate.matching.domain.model.Location;
 import com.yeoljeong.tripmate.matching.domain.model.Matching;
@@ -21,9 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class MatchingCommandService {
 
 	private final MatchingRepository repository;
-	private final MatchingEventPort matchingEventPort;
 
-	public MatchingDetailResult create(CreateMatchingCommand command) {
+	public Matching create(CreateMatchingCommand command) {
 		if (repository.existsByHostUserIdAndMatchingStatusOpen(command.userId())) {
 			throw new BusinessException(MatchingErrorCode.MATCHING_ALREADY_IN_PROGRESS);
 		}
@@ -39,15 +36,13 @@ public class MatchingCommandService {
 				command.preferenceGender(), command.allowSmoking()
 			)
 		);
-		Matching saved = repository.save(matching);
-		matchingEventPort.appendMatchingCreated(matching);
-		return MatchingDetailResult.from(saved);
+		return repository.save(matching);
 	}
 
-	public void accept(UUID userId, UUID matchingId) {
+	public Matching accept(UUID userId, UUID matchingId) {
 		Matching matching = repository.findByIdAndIsDeletedFalse(matchingId)
 			.orElseThrow(() -> new BusinessException(MatchingErrorCode.NO_ACTIVE_MATCHING));
 		matching.accept(userId);
-		matchingEventPort.appendMatchingAccomplished(matching);
+		return matching;
 	}
 }
