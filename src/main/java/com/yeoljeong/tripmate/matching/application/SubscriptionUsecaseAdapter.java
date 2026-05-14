@@ -22,8 +22,9 @@ public class SubscriptionUsecaseAdapter implements SubscriptionUsecase {
 	@Override
 	public SseEmitter execute(UserMatchingCriteriaCommand command) {
 		eventPort.appendMateSubscribed(command.userId());
+		SseEmitter emitter = sseSubscriptionService.subscribe(command);
 		userGeoStore.saveUserLocation(command.userId(), command.latitude(), command.longitude());
-		return sseSubscriptionService.subscribe(command);
+		return emitter;
 	}
 
 	@Override
