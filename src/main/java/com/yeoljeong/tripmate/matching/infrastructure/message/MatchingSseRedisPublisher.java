@@ -34,11 +34,11 @@ public class MatchingSseRedisPublisher implements MatchingNotifier {
 	}
 
 	@Override
-	public void publishClosedToUser(UUID userId, UUID matchingId) {
+	public void publishClosedToUser(UUID userId, Matching matching) {
 		String channel = CLOSED_CHANNEL_PREFIX + userId;
 		try {
-			redisTemplate.convertAndSend(channel, new MatchingMatchedPayload(matchingId));
-			log.debug("[MatchingSSE] 매칭 종료 전송 - userId: {}, matchingId: {}", userId, matchingId);
+			redisTemplate.convertAndSend(channel, toMatchingMatchedPayload(matching));
+			log.debug("[MatchingSSE] 매칭 종료 전송 - userId: {}, matchingId: {}", userId, matching.getId());
 		} catch (Exception e) {
 			log.error("[MatchingSSE] 매칭 종료 전송 실패 - channel: {}, error : {}]", channel, e.getMessage(), e);
 			throw e;
@@ -74,6 +74,17 @@ public class MatchingSseRedisPublisher implements MatchingNotifier {
 		return new MatchingSsePayload(
 			matching.getId(),
 			matching.getHostUserId(),
+			matching.getTitle(),
+			matching.getDescription()
+		);
+	}
+
+	private MatchingMatchedPayload toMatchingMatchedPayload(Matching matching) {
+		return new MatchingMatchedPayload(
+			matching.getId(),
+			matching.getHostUserId(),
+			matching.getMateUserId(),
+			matching.getChatUrl(),
 			matching.getTitle(),
 			matching.getDescription()
 		);
