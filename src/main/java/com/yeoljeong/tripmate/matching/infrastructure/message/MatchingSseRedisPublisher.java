@@ -49,7 +49,8 @@ public class MatchingSseRedisPublisher implements MatchingNotifier {
 		String guardKey = GUARD_KEY_PREFIX + matching.getId() + ":" + userId;
 		Boolean isNew = redisTemplate.opsForValue()
 			.setIfAbsent(guardKey, "1", Duration.ofMinutes(10));
-
+		//
+		log.info("[MatchingSSE] guardKey: {}, isNew: {}", guardKey, isNew);
 		if (Boolean.FALSE.equals(isNew)) {
 			log.debug("[MatchingSSE] 중복 발송 방지 - userId: {}, matchingId: {}", userId, matching.getId());
 			return;
@@ -60,6 +61,8 @@ public class MatchingSseRedisPublisher implements MatchingNotifier {
 	private void publish(UUID userId, Matching matching) {
 
 		String channel = CHANNEL_PREFIX + userId;
+		//
+		log.info("[MatchingSSE] Redis publish - channel: {}, matchingId: {}", channel, matching.getId());
 		try {
 			redisTemplate.convertAndSend(channel, toMatchingSsePayload(matching));
 		} catch (Exception e) {

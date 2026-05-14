@@ -57,6 +57,7 @@ public class UserSettingEventListener {
 	)
 	public void findEnableMatchingUser(@Payload String payload, Acknowledgment acknowledgment) {
 		MatchingCreateEvent event = deserializer.deserialize(payload, MatchingCreateEvent.class);
+		log.info("[UserSetting] matching.created 수신 - matchingId: {}", event.matchingId());
 		try {
 			findEnableMatchingUserUsecase.findAllEnableMatchingUser(
 				new MatchingCandidateCriteria(

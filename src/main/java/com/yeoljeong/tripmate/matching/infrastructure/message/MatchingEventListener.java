@@ -31,6 +31,7 @@ public class MatchingEventListener {
 	)
 	public void handleMatchingCandidatesFound(@Payload String payload, Acknowledgment acknowledgment) {
 		MatchingCandidatesFoundEvent event = deserializer.deserialize(payload, MatchingCandidatesFoundEvent.class);
+		log.info("[Matching] matching.candidates.found 수신 - candidateIds: {}", event.userIds());
 		try {
 			matchingCandidateStore.save(event.matchingId(), event.userIds());
 			notifyMatchingCandidatesUsecase.sendMatchingInfo(

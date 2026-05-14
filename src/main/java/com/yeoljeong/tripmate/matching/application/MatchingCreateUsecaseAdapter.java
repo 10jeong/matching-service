@@ -25,6 +25,7 @@ public class MatchingCreateUsecaseAdapter implements MatchingCreateUsecase {
 			command.userId(), command.lat().doubleValue(), command.lng().doubleValue()
 		);
 		eventPort.appendMatchingCreated(matching);
+		log.info("[Matching] matching.created 이벤트 발행 - matchingId: {}", matching.getId());
 		return MatchingDetailResult.from(matching);
 	}
 }
