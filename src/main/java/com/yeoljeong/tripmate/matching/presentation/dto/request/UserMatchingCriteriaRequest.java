@@ -8,9 +8,9 @@ public record UserMatchingCriteriaRequest (
 	String gender,
 	boolean isSmoking,
 	@NotNull
-	Double latitude,
+	Double lat,
 	@NotNull
-	Double longitude,
+	Double lng,
 	String mbtiIE,
 	String mbtiSN,
 	String mbtiTF,
@@ -28,8 +28,8 @@ public record UserMatchingCriteriaRequest (
 			userId,
 			gender,
 			isSmoking,
-			latitude,
-			longitude,
+			lat,
+			lng,
 			mbtiIE,
 			mbtiSN,
 			mbtiTF,
