@@ -16,6 +16,7 @@ public enum MatchingErrorCode implements ErrorCode {
 	NO_ACTIVE_MATCHING(HttpStatus.NOT_FOUND, "진행 중인 매칭정보가 없습니다."),
 	HOST_CANNOT_ACCEPT_OWN_MATCHING(HttpStatus.BAD_REQUEST, "호스트 본인의 매칭을 수락할 수 없습니다."),
 	MATCHING_ALREADY_MATCHED(HttpStatus.CONFLICT, "이미 매칭이 완성된 방입니다"),
+	MATCHING_LOCK_FAILED(HttpStatus.CONFLICT, "현재 다른 요청 처리 중입니다. 락 획득 실패"),
 	;
 	private final HttpStatus status;
 	private final String message;
