@@ -1,5 +1,6 @@
 package com.yeoljeong.tripmate.usersetting.infrastructure.message;
 
+import com.yeoljeong.tripmate.common.aop.TripmateLock;
 import com.yeoljeong.tripmate.domain.constants.OutboxStatus;
 import com.yeoljeong.tripmate.usersetting.infrastructure.persistence.UserSettingOutbox;
 import com.yeoljeong.tripmate.usersetting.infrastructure.persistence.jpa.UserSettingOutboxRepository;
@@ -19,8 +20,9 @@ public class UserSettingOutboxDispatcher {
 	private final UserSettingOutboxRepository outboxRepository;
 	private final KafkaTemplate<String, String> kafkaTemplate;
 
-	@Scheduled(fixedDelay = 5000)
+	@Scheduled(fixedDelay = 3000)
 	@Transactional
+	@TripmateLock(key = "'user-setting:outbox:dispatcher'")
 	public void dispatch() {
 		List<UserSettingOutbox> pendingEvents = outboxRepository
 			.findTop100ByStatusOrderByCreatedAtAsc(OutboxStatus.PENDING);

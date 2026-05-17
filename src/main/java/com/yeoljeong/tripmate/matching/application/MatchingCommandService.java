@@ -1,5 +1,6 @@
 package com.yeoljeong.tripmate.matching.application;
 
+import com.yeoljeong.tripmate.common.aop.TripmateLock;
 import com.yeoljeong.tripmate.exception.BusinessException;
 import com.yeoljeong.tripmate.matching.application.dto.command.CreateMatchingCommand;
 import com.yeoljeong.tripmate.matching.domain.exception.MatchingErrorCode;
@@ -39,6 +40,7 @@ public class MatchingCommandService {
 		return repository.save(matching);
 	}
 
+	@TripmateLock(key = "'matching:accept' + #matchingId")
 	public Matching accept(UUID userId, UUID matchingId) {
 		Matching matching = repository.findByIdAndIsDeletedFalse(matchingId)
 			.orElseThrow(() -> new BusinessException(MatchingErrorCode.NO_ACTIVE_MATCHING));
