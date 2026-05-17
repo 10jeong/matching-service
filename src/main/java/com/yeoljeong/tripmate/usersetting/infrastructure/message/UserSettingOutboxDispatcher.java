@@ -28,7 +28,9 @@ public class UserSettingOutboxDispatcher {
 			.findTop100ByStatusOrderByCreatedAtAsc(OutboxStatus.PENDING);
 		pendingEvents.forEach(outbox -> {
 			try {
+				long start = System.currentTimeMillis();
 				kafkaTemplate.send(outbox.getTopic(), outbox.getPayload()).get();
+				log.info("[OUTBOX] kafka 발행 소요 시간 : {}ms", System.currentTimeMillis() - start);
 				outbox.published();
 			} catch (Exception e) {
 				log.error("[OUTBOX_DISPATCHER] 발행 실패 - topic: {}, id: {}", outbox.getTopic(), outbox.getId(), e);
