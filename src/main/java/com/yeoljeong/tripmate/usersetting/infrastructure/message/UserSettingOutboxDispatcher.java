@@ -22,7 +22,7 @@ public class UserSettingOutboxDispatcher {
 
 	@Scheduled(fixedDelay = 3000)
 	@Transactional
-	@TripmateLock(key = "'user-setting:outbox:dispatcher'")
+	@TripmateLock(key = "'user-setting:outbox:dispatcher'", tryLockTime = 0)
 	public void dispatch() {
 		List<UserSettingOutbox> pendingEvents = outboxRepository
 			.findTop100ByStatusOrderByCreatedAtAsc(OutboxStatus.PENDING);

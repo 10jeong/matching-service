@@ -22,7 +22,7 @@ public class MatchingOutboxDispatcher {
 
 	@Scheduled(fixedDelay = 3000)
 	@Transactional
-	@TripmateLock(key = "'matching:outbox:dispatcher'")
+	@TripmateLock(key = "'matching:outbox:dispatcher'", tryLockTime = 0)
 	public void dispatch() {
 		List<MatchingOutbox> events = matchingOutboxRepository
 			.findTop100ByStatusOrderByCreatedAtAsc(OutboxStatus.PENDING);
