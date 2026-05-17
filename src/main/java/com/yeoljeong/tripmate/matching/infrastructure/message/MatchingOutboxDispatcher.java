@@ -1,5 +1,6 @@
 package com.yeoljeong.tripmate.matching.infrastructure.message;
 
+import com.yeoljeong.tripmate.common.aop.TripmateLock;
 import com.yeoljeong.tripmate.domain.constants.OutboxStatus;
 import com.yeoljeong.tripmate.matching.infrastructure.persistence.MatchingOutbox;
 import com.yeoljeong.tripmate.matching.infrastructure.persistence.jpa.MatchingOutboxRepository;
@@ -19,8 +20,9 @@ public class MatchingOutboxDispatcher {
 	private final MatchingOutboxRepository matchingOutboxRepository;
 	private final KafkaTemplate<String, String> kafkaTemplate;
 
-	@Scheduled(fixedDelay = 5000)
+	@Scheduled(fixedDelay = 3000)
 	@Transactional
+	@TripmateLock(key = "'matching:outbox:dispatcher'")
 	public void dispatch() {
 		List<MatchingOutbox> events = matchingOutboxRepository
 			.findTop100ByStatusOrderByCreatedAtAsc(OutboxStatus.PENDING);
