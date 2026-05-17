@@ -13,6 +13,6 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface TripmateLock {
 	String key();
-	long tryLockTime();
-	long leaseTime();
+	long tryLockTime() default 5000L;
+	long leaseTime() default 15000L;
 }
